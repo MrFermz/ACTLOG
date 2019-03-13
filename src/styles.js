@@ -6,7 +6,7 @@ const view = StyleSheet.create({
   },
   loginContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
   detailContainer: {

@@ -139,10 +139,11 @@ class LoginScreen extends Component {
     var icoSize = 30
     return (
       <View style={styles.view.loginContainer}>
-        <Text>1.2.4</Text>
         <Image
-          source={require('../assets/logo.png')}
-          style={{ width: 300, height: 100 }} />
+          resizeMode='center'
+          style={{ width: 220, height: 220 }}
+          source={require('../assets/logo.png')} />
+        <Text>1.3.0</Text>
         <Input
           containerStyle={styles.input.container}
           inputContainerStyle={styles.input.inputContainer}
