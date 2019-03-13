@@ -26,6 +26,10 @@ class HomeScreen extends Component {
     this.props.navigation.navigate('StudentVisit')
   }
 
+  SelectCom() {
+    this.props.navigation.navigate('StudentSelCom')
+  }
+
   upload() {
     var storage = firebase.storage()
     var pathReference = storage.ref('uploads/logo.png')
@@ -62,11 +66,17 @@ class HomeScreen extends Component {
           />
           <Text style={styles.label.homeMenu}>ดูผลการนิเทศ</Text>
         </TouchableOpacity>
-        {/* <TouchableOpacity
-          onPress={() => this.upload()}
-          style={styles.icon.homeMenuContainer}>
-          <Text style={styles.label.homeMenu}>Upload Pic</Text>
-        </TouchableOpacity> */}
+        <TouchableOpacity
+          style={styles.icon.homeMenuContainer}
+          onPress={() => this.SelectCom(this)}>
+          <Icon
+            name='building'
+            size={icoSize}
+            style={styles.icon.color}
+          />
+          <Text style={styles.label.homeMenu}>เลือกที่ฝึกงาน</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.icon.homeMenuContainer} />
       </View>
     )
   }

@@ -7,7 +7,9 @@ import {
 } from 'react-native'
 import {
   Card,
+  Rating
 } from 'react-native-elements'
+import { NavigationEvents } from 'react-navigation'
 import firebase from 'react-native-firebase'
 import styles from '../../styles'
 
@@ -46,7 +48,8 @@ class VisitScreen extends Component {
                 sid: val.sid,
                 suid: val.uid,
                 tuid: tuid,
-                key: key
+                key: key,
+                score: child.val().rating
               })
               this.setState({ list: items })
             })
@@ -57,9 +60,10 @@ class VisitScreen extends Component {
 
   render() {
     const { list } = this.state
-    console.log(list)
+    // console.log(list)
     return (
       <ScrollView style={styles.view.scrollView}>
+        <NavigationEvents onDidFocus={() => this.componentDidMount()} />
         <View style={styles.view.container}>
           {
             list.map((user, i) => {
@@ -68,6 +72,14 @@ class VisitScreen extends Component {
                   <View style={styles.view.headerContainer}>
                     <Text style={styles.label.header}>{user.fname}  {user.lname}</Text>
                     <Text style={styles.label.sub}>{user.email}</Text>
+                    <Rating
+                      type='rocket'
+                      readonly
+                      count={5}
+                      fractions={1}
+                      startingValue={user.score}
+                      size={40}
+                    />
                     <TouchableOpacity
                       style={styles.button.sub}
                       onPress={() =>
@@ -76,7 +88,8 @@ class VisitScreen extends Component {
                           tuid: user.tuid,
                           fname: user.fname,
                           lname: user.lname,
-                          key: user.key
+                          key: user.key,
+                          score: user.score
                         })}>
                       <Text style={styles.button.subLabel}>บันทึกนิเทศ</Text>
                     </TouchableOpacity>

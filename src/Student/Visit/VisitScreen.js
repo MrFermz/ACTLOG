@@ -4,11 +4,13 @@ import {
   Text,
   ScrollView,
   Alert,
-  TouchableOpacity
+  TouchableOpacity,
+  Modal
 } from 'react-native'
 import {
   Card,
-  Rating
+  Rating,
+  AirbnbRating
 } from 'react-native-elements'
 import firebase from 'react-native-firebase'
 import styles from '../../styles'
@@ -17,7 +19,7 @@ class VisitScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      list: [],
+      list: []
     }
   }
 
@@ -49,7 +51,8 @@ class VisitScreen extends Component {
                 sid: val.sid,
                 uid: val.uid,
                 comment: child.val().comment,
-                key: key
+                key: key,
+                score: child.val().rating
               })
               this.setState({ list: items })
             })
@@ -71,6 +74,14 @@ class VisitScreen extends Component {
                   <View style={styles.view.headerContainer}>
                     <Text style={styles.label.header}>{user.fname}  {user.lname}</Text>
                     <Text style={styles.label.sub}>{user.email}</Text>
+                    <Rating
+                      type='rocket'
+                      readonly
+                      count={5}
+                      fractions={1}
+                      startingValue={user.score}
+                      size={40}
+                    />
                     <Text style={styles.label.visitComment}>{user.comment}</Text>
                     <TouchableOpacity
                       onPress={() => this.props.navigation.navigate('StudentViewVisit', {
@@ -82,11 +93,11 @@ class VisitScreen extends Component {
                   </View>
                 </Card>
               </View>
-            );
+            )
           })
         }
       </ScrollView>
-    );
+    )
   }
 }
 

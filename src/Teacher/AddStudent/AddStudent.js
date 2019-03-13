@@ -39,13 +39,16 @@ class AddStudent extends Component {
           if (stat == true) {
             std.child(suid).once('value').then((snapshot) => {
               var val = snapshot.val()
-              items.push({
-                fname: val.fname,
-                lname: val.lname,
-                email: val.email,
-                sid: val.sid,
-                uid: val.uid
-              })
+              var currYear = new Date().getFullYear()
+              if (val.year == currYear) {
+                items.push({
+                  fname: val.fname,
+                  lname: val.lname,
+                  email: val.email,
+                  sid: val.sid,
+                  uid: val.uid
+                })
+              }
               this.setState({ list: items })
             })
           }

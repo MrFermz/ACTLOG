@@ -83,7 +83,8 @@ class EditDetailScreen extends Component {
     detail.update({
       fname: fname,
       lname: lname,
-      telNum: telNum
+      telNum: telNum,
+      setup: false
     }).then(() => {
       Alert.alert(
         'แจ้งเตือน',
@@ -109,7 +110,7 @@ class EditDetailScreen extends Component {
       const uid = firebase.auth().currentUser.uid
       const imageRef = firebase
         .storage()
-        .ref(uid)
+        .ref(`avatar/${uid}`)
         .child('avatar.jpg');
       let mime = 'image/jpg'
 

@@ -7,6 +7,7 @@ import {
 
 import LoginScreen from './LoginScreen'
 import RegisterScreen from './RegisterScreen'
+import SetupScreen from './Setup'
 
 //student side
 import StdHome from './Student/index'
@@ -18,6 +19,8 @@ import StdViewVisit from './Student/Visit/ViewVisit'
 import StdComment from './Student/Comment/CommentScreen'
 import StdDetail from './Student/DetailScreen'
 import StdEditDetail from './Student/EditDetailScreen'
+import StdSelCom from './Student/Company/SelectCompany'
+import StdAddCom from './Student/Company/AddCompany'
 
 //admin side
 import AdminHome from './Admin/index'
@@ -48,6 +51,9 @@ const RootStack = createStackNavigator({
     navigationOptions: {
       title: 'สมัครสมาชิก'
     }
+  },
+  Setup: {
+    screen: SetupScreen
   },
 
   // นักศึกษา
@@ -89,6 +95,12 @@ const RootStack = createStackNavigator({
   },
   StudentEditDetail: {
     screen: StdEditDetail
+  },
+  StudentSelCom: {
+    screen: StdSelCom
+  },
+  StudentAddCom: {
+    screen: StdAddCom
   },
 
   // แอดมิน

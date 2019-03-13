@@ -104,7 +104,8 @@ class TimeTableScreen extends Component {
               tuid: child.key,
               suid: uid,
               comment: '',
-              stat: true
+              stat: true,
+              rating: 2.5
             })
           })
         }).then(() => {

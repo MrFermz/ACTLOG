@@ -61,31 +61,54 @@ class LoginScreen extends Component {
   }
 
   getUserType() {
-    var data, user, uid
-    uid = firebase.auth().currentUser.uid
-    user = firebase.database().ref('users/' + uid + '/type')
+    var uid = firebase.auth().currentUser.uid
+    var typeStat = firebase.database().ref(`users/${uid}/typeStat`)
     this.setState({ type: '' })
-    user.once('value').then(snapshot => {
-      data = snapshot.val()
-      this.setState({ type: data })
-      console.log(data)
-      if (this.state.type == data && this.state.type != 'none') {
-        this.goHomeScreen()
+    typeStat.once('value').then((snapshot) => {
+      if (snapshot.val() == false) {
+        this.setState({ loading: false })
+      } else {
+        firebase.database().ref(`users/${uid}`)
+          .once('value').then((snapshot) => {
+            var currYear = new Date().getFullYear()
+            var val = snapshot.val().type
+            var setup = snapshot.val().setup
+            var year = snapshot.val().year
+            console.log(currYear, year)
+            this.setState({ type: val })
+            if (this.state.type == val && this.state.type != 'none') {
+              if ((currYear == year && val == 'Student') || val == 'Teacher' || val == 'Admin') {
+                this.goHomeScreen(val, setup)
+              } else {
+                Alert.alert('invalid years.')
+              }
+            }
+            this.setState({ loading: false })
+          })
       }
-      this.setState({ loading: false })
     })
   }
 
-  goHomeScreen() {
-    const { type } = this.state
-    if (type) {
+  goHomeScreen(type, setup) {
+    if (setup == true) {
       const resetAction = StackActions.reset({
         index: 0,
         actions: [NavigationActions.navigate({
-          routeName: type
+          routeName: 'Setup',
+          params: { type: type }
         })]
       })
       this.props.navigation.dispatch(resetAction)
+    } else {
+      if (type) {
+        const resetAction = StackActions.reset({
+          index: 0,
+          actions: [NavigationActions.navigate({
+            routeName: type
+          })]
+        })
+        this.props.navigation.dispatch(resetAction)
+      }
     }
   }
 

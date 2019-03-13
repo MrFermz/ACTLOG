@@ -41,7 +41,6 @@ class ActivityScreen extends Component {
 
   componentDidMount() {
     const { date, morning, afternoon, key } = this.state
-    this.getList()
     this.props.navigation.setParams({
       edit: () => this.props.navigation.navigate('StudentAddActivity', {
         key: key,
@@ -50,6 +49,7 @@ class ActivityScreen extends Component {
         afternoon: afternoon
       })
     })
+    this.getList()
   }
 
   getList() {

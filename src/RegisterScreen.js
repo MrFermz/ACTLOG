@@ -5,7 +5,8 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
-  Button
+  Button,
+  Picker
 } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { Input } from 'react-native-elements'
@@ -20,28 +21,32 @@ class RegisterScreen extends Component {
       password: '',
       rePassword: '',
       loading: false,
-      error: ''
+      error: '',
+      type: ''
     })
   }
 
   onRegisterPressed() {
-    var uid
-    const { email, password, rePassword } = this.state
+    const { email, password, rePassword, type } = this.state
     firebaseAuth = firebase.auth()
     if (email != '' && password != '') {
       if (password == rePassword) {
         this.setState({ loading: true })
         firebaseAuth.createUserWithEmailAndPassword(email, password)
           .then(() => {
-            uid = firebaseAuth.currentUser.uid
+            var year = new Date().getFullYear()
+            var uid = firebaseAuth.currentUser.uid
             firebase.database().ref('users/' + uid).set({
               uid: uid,
               email: email,
               fname: 'ชื่อจริง',
               lname: 'นามสกุล',
               telNum: 'เบอร์โทร',
-              type: 'none',
-              avatar: ''
+              type: type,
+              avatar: '',
+              setup: false,
+              typeStat: false,
+              year: year
             }).then(() => {
               this.setState({ loading: false })
               Alert.alert(
@@ -149,6 +154,19 @@ class RegisterScreen extends Component {
             />
           }
           placeholder='รหัสผ่านอีกครั้ง' />
+        <Picker
+          selectedValue={this.state.type}
+          mode='dialog'
+          style={{
+            height: 50, width: '90%', alignSelf: 'center', marginTop: 10,
+          }}
+          onValueChange={(value, index) =>
+            this.setState({ type: value })
+          }>
+          <Picker.Item label="- เลือกประเภทผู้ใช้ -" value='none' />
+          <Picker.Item label="นักศึกษา" value="Student" />
+          <Picker.Item label="อาจารย์" value="Teacher" />
+        </Picker>
         <Text style={styles.error.password}>{this.state.error}</Text>
         {this.buttonLoader()}
       </ScrollView>

@@ -7,7 +7,10 @@ import {
   TouchableOpacity,
   Alert,
   Image,
-  Platform
+  Platform,
+  Picker,
+  Modal,
+  ActivityIndicator
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker'
 import { Avatar } from 'react-native-elements'
@@ -55,7 +58,8 @@ class EditDetailScreen extends Component {
       email: '',
       telNum: '',
       uid: '',
-      avatar: ''
+      avatar: '',
+      modalVisible: false
     }
   }
 
@@ -104,6 +108,7 @@ class EditDetailScreen extends Component {
       telNum: telNum,
       date: date,
       sidStat: false,
+      setup: false
     }).then(() => {
       Alert.alert(
         'แจ้งเตือน',
@@ -155,8 +160,8 @@ class EditDetailScreen extends Component {
       const uid = firebase.auth().currentUser.uid
       const imageRef = firebase
         .storage()
-        .ref(uid)
-        .child('avatar.jpg');
+        .ref(`avatar/${uid}`)
+        .child('avatar.jpg')
       let mime = 'image/jpg'
 
       imageRef
@@ -164,6 +169,7 @@ class EditDetailScreen extends Component {
         .then(async () => {
           return imageRef.getDownloadURL()
             .then((url) => {
+              this.setModalVisible(true)
               console.log(url)
               this.setState({ avatar: url })
               this.saveUrl(url)
@@ -179,14 +185,28 @@ class EditDetailScreen extends Component {
     firebase.database().ref(`users/${uid}`)
       .update({ avatar: url })
       .then(() => {
-        Alert.alert('อัพโหลดรูปโปรไฟล์เสร็จแล้ว!')
+        this.setModalVisible(!this.state.modalVisible)
       })
+  }
+
+  setModalVisible(visible) {
+    this.setState({ modalVisible: visible })
   }
 
   render() {
     const { sid, fname, lname, group, subject, telNum, email, date, sidStat } = this.state
     return (
       <ScrollView style={styles.view.scrollView}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={this.state.modalVisible}>
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+            <ActivityIndicator
+              size='large'
+              color='red' />
+          </View>
+        </Modal>
         <Avatar
           source={{ uri: this.state.avatar }}
           size='xlarge'

@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
 import {
+  View,
   Text,
   ScrollView,
   TouchableOpacity,
   TextInput,
   Alert,
-  Image
+  Image,
+  Modal,
+  ActivityIndicator
 } from 'react-native'
 import ImagePicker from 'react-native-image-crop-picker'
 import Icon from 'react-native-vector-icons/FontAwesome5'
@@ -47,8 +50,8 @@ class AddActivity extends Component {
   }
 
   componentDidMount() {
-    this.getActivity()
     this.props.navigation.setParams({ save: this.saveActivity.bind(this) })
+    this.getActivity()
   }
 
   saveActivity() {
@@ -90,7 +93,6 @@ class AddActivity extends Component {
   }
 
   _pickImage() {
-    var list = []
     ImagePicker.openPicker({
       width: 1280,
       height: 720,
@@ -102,6 +104,7 @@ class AddActivity extends Component {
         console.log(e.path)
         this.uploadImage(e.path, new Date().getTime())
       })
+      Alert.alert('Uploaded')
     })
   }
 
@@ -136,7 +139,6 @@ class AddActivity extends Component {
     firebase.database().ref(`timeTable/${uid}/${key}/photos`)
       .push({ photo: url })
       .then(() => {
-        Alert.alert('อัพโหลดเสร็จแล้ว.')
       })
   }
 

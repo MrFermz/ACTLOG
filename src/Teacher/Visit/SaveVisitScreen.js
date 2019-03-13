@@ -8,7 +8,11 @@ import {
   View,
   Image
 } from 'react-native'
-import { Card } from 'react-native-elements'
+import {
+  Card,
+  AirbnbRating,
+  Rating
+} from 'react-native-elements'
 import ImagePicker from 'react-native-image-crop-picker'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import firebase from 'react-native-firebase'
@@ -47,7 +51,8 @@ class SaveVisitScreen extends Component {
     this.state = {
       comment: '',
       vid: '',
-      list: []
+      list: [],
+      score: null
     }
   }
 
@@ -89,10 +94,11 @@ class SaveVisitScreen extends Component {
   }
 
   saveVisit() {
-    const { comment, vid } = this.state
+    const { comment, vid, score } = this.state
     var visit = firebase.database().ref(`visit/${vid}`)
     visit.update({
-      comment: comment
+      comment: comment,
+      rating: score
     }).then(() => {
       Alert.alert(
         'แจ้งเตือน',
@@ -154,9 +160,13 @@ class SaveVisitScreen extends Component {
       })
   }
 
+  saveRating(value) {
+    this.setState({ score: value })
+  }
+
   render() {
-    const { comment, vid, list } = this.state
-    // console.log(list)
+    const { comment, list } = this.state
+    var score = this.props.navigation.getParam('score')
     return (
       <ScrollView style={styles.view.scrollView}>
         {/* <Text>{vid}</Text> */}
@@ -170,6 +180,15 @@ class SaveVisitScreen extends Component {
           autoCapitalize='none'
           autoCorrect={false}>
         </TextInput>
+        <Rating
+          type='rocket'
+          onFinishRating={(value) => { this.saveRating(value) }}
+          count={5}
+          showRating={true}
+          fractions={1}
+          startingValue={score}
+          size={40}
+        />
         <TouchableOpacity
           onPress={() => this._pickImage()}
           style={styles.button.sub}>

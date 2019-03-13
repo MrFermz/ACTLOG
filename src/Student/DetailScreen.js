@@ -5,12 +5,15 @@ import {
   ScrollView,
   TouchableOpacity,
   Button,
-  Alert
+  Alert,
+  Picker,
+  Modal
 } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import {
   Avatar,
   Card,
+  Rating
 } from 'react-native-elements'
 import { NavigationEvents } from 'react-navigation'
 import firebase from 'react-native-firebase'
@@ -25,7 +28,11 @@ class DetailScreen extends Component {
       email: '',
       telNum: '',
       uuid: '',
-      avatar: ''
+      avatar: '',
+      company: '',
+      modalVisible: false,
+      score: '',
+      scoreButton: null
     }
   }
 
@@ -50,7 +57,8 @@ class DetailScreen extends Component {
         email: data.email,
         date: data.date,
         sidStat: data.sidStat,
-        avatar: data.avatar
+        avatar: data.avatar,
+        company: data.company
       })
       console.log(data)
     })
@@ -73,11 +81,97 @@ class DetailScreen extends Component {
     })
   }
 
+  setModalVisible(visible) {
+    this.setState({ modalVisible: visible })
+  }
+
+  showModal() {
+    return (
+      <Modal
+        animationType='slide'
+        transparent={false}
+        visible={this.state.modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+        }}>
+        <View style={{ marginTop: 22 }}>
+          <View>
+            <Rating
+              type='star'
+              ratingTextColor='orange'
+              showRating={true}
+              count={5}
+              fractions={1}
+              startingValue={2.5}
+              size={40}
+              onFinishRating={(value) => { this.saveRating(value) }}
+            />
+            <TouchableOpacity
+              style={styles.button.main}
+              onPress={() => this.saveScore()}>
+              <Text style={styles.button.mainLabel}>บันทึกคะแนน</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    )
+  }
+
+  saveRating(value) {
+    this.setState({ score: value })
+  }
+
+  saveScore() {
+    const { score, company } = this.state
+    var uid = firebase.auth().currentUser.uid
+    console.log(company, score)
+    firebase.database().ref(`company/${company}/score/${uid}`)
+      .update({
+        score: score
+      }).then(() => {
+        Alert.alert(
+          'แจ้งเตือน',
+          'บันทึกคะแนนสำเร็จ',
+          [
+            { text: 'ตกลง', onPress: () => this.setModalVisible(!this.state.modalVisible) }
+          ],
+          { cancelable: false }
+        )
+      })
+  }
+
+  scoreButtonLoader() {
+    const { scoreButton } = this.state
+    var uid = firebase.auth().currentUser.uid
+    firebase.database().ref(`users/${uid}/company`)
+      .once('value').then((snapshot) => {
+        var val = snapshot.val()
+        this.setState({ scoreButton: val })
+      })
+    if (scoreButton) {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            this.setModalVisible(true)
+          }}
+          style={{
+            width: 100, height: 50,
+            alignSelf: 'center', justifyContent: 'center',
+            backgroundColor: '#34495E'
+          }}>
+          <Text style={{ alignSelf: 'center', color: 'white', fontSize: 20 }}>
+            ให้คะแนน</Text>
+        </TouchableOpacity>
+      )
+    }
+  }
+
   render() {
-    const { sid, fname, lname, group, subject, telNum, email, date, avatar, uuid } = this.state
+    const { sid, fname, lname, group, subject, telNum, email, date, avatar, score, company } = this.state
     return (
       <View style={{ flex: 1 }}>
         <NavigationEvents onDidFocus={() => this.componentDidMount()} />
+        {this.showModal()}
         <ScrollView style={styles.view.scrollView}>
           <View style={styles.view.detailContainer}>
             <Card containerStyle={styles.view.card}>
@@ -121,6 +215,19 @@ class DetailScreen extends Component {
                     name='phone'
                     size={22} />
                   <Text style={styles.label.detail}>{telNum}</Text>
+                </View>
+
+                <View style={styles.view.containerWithBorder}>
+                  <View style={{ flex: 2, flexDirection: 'row' }}>
+                    <Icon
+                      style={styles.icon.detail}
+                      name='building'
+                      size={22} />
+                    <Text style={styles.label.detail}>{company}</Text>
+                  </View>
+                  <View style={{ flex: 1, alignSelf: 'center' }}>
+                    {this.scoreButtonLoader()}
+                  </View>
                 </View>
 
                 <View style={styles.view.containerWithBorder}>
