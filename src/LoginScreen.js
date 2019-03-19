@@ -41,7 +41,12 @@ class LoginScreen extends Component {
     if (email && password && (email != '' || password != '')) {
       firebase.auth().signInWithEmailAndPassword(email, password)
         .then(() => {
-          this.getUserType()
+          firebase.auth().onAuthStateChanged((user) => {
+            this.setState({ loading: false })
+            // if (user.emailVerified) {
+              this.getUserType()
+            // }
+          })
         })
         .catch((msgError) => {
           this.setState({ loading: false })
@@ -143,7 +148,7 @@ class LoginScreen extends Component {
           resizeMode='center'
           style={{ width: 220, height: 220 }}
           source={require('../assets/logo.png')} />
-        <Text>1.3.0</Text>
+        <Text>1.3.1</Text>
         <Input
           containerStyle={styles.input.container}
           inputContainerStyle={styles.input.inputContainer}

@@ -54,6 +54,10 @@ class HomeScreen extends Component {
           />
           <Text style={styles.label.homeMenu}>รายชื่ออาจารย์</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.icon.homeMenuContainer}>
+          <Icon size={icoSize} />
+        </TouchableOpacity>
       </View>
     );
   }

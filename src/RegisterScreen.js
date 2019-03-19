@@ -46,17 +46,22 @@ class RegisterScreen extends Component {
               avatar: '',
               setup: false,
               typeStat: false,
-              year: year
-            }).then(() => {
-              this.setState({ loading: false })
-              Alert.alert(
-                'แจ้งเตือน',
-                'สมัครสมาชิกสำเร็จ.\nติดต่อแอดมินเพื่อยืนยันการเข้าใช้งาน',
-                [
-                  { text: 'ตกลง', onPress: () => this.props.navigation.goBack() },
-                ],
-                { cancelable: false },
-              )
+              year: String(year)
+            }).then((sendVerify) => {
+              if (sendVerify == false) {
+                return false
+              } else {
+                firebase.auth().currentUser.sendEmailVerification()
+                this.setState({ loading: false })
+                Alert.alert(
+                  'แจ้งเตือน',
+                  'สมัครสมาชิกสำเร็จ.\nติดต่อแอดมินเพื่อยืนยันการเข้าใช้งาน',
+                  [
+                    { text: 'ตกลง', onPress: () => this.props.navigation.goBack() },
+                  ],
+                  { cancelable: false },
+                )
+              }
             })
           }).catch((error) => {
             this.setState({ loading: false })

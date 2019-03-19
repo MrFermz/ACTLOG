@@ -150,6 +150,7 @@ class EditDetailScreen extends Component {
 
   _pickImage() {
     ImagePicker.showImagePicker(options, (res) => {
+      console.log(res.uri)
       this.uploadImage(res.uri)
     })
   }
@@ -170,7 +171,7 @@ class EditDetailScreen extends Component {
           return imageRef.getDownloadURL()
             .then((url) => {
               this.setModalVisible(true)
-              console.log(url)
+              // console.log(url)
               this.setState({ avatar: url })
               this.saveUrl(url)
             })
