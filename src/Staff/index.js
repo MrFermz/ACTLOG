@@ -1,15 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import firebase from 'react-native-firebase'
 import {
   createAppContainer,
   createBottomTabNavigator,
   createDrawerNavigator,
   StackActions,
-  NavigationActions,
+  NavigationActions
 } from 'react-navigation'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import firebase from 'react-native-firebase'
 
-import AdminHome from './HomeScreen'
+import StaffHome from './HomeScreen'
+import StaffDetail from './DetailScreen'
 
 class Logout extends Component {
   Logout() {
@@ -22,6 +23,7 @@ class Logout extends Component {
       this.props.navigation.dispatch(resetAction)
     })
   }
+
   render() {
     return [
       this.Logout()
@@ -31,32 +33,44 @@ class Logout extends Component {
 
 var iconSize = 25
 const TabStack = createBottomTabNavigator({
-  AdminHome: {
-    screen: AdminHome,
+  StaffDetail: {
+    screen: StaffDetail,
     navigationOptions: {
-      title: 'หน้าแรก',
+      title: 'ข้อมูลส่วนตัว',
       tabBarIcon: ({ tintColor }) => (
         <Icon
-          name="home"
+          name='info'
           size={iconSize}
           color={tintColor} />
       )
     }
   },
-  AdminLogout: {
+  StaffHome: {
+    screen: StaffHome,
+    navigationOptions: {
+      title: 'หน้าแรก',
+      tabBarIcon: ({ tintColor }) => (
+        <Icon
+          name='home'
+          size={iconSize}
+          color={tintColor} />
+      )
+    }
+  },
+  StudentLogout: {
     screen: Logout,
     navigationOptions: {
       title: 'ออกจากระบบ',
       tabBarIcon: ({ tintColor }) => (
         <Icon
-          name="sign-out-alt"
+          name='sign-out-alt'
           size={iconSize}
           color={tintColor} />
       )
     }
   }
 }, {
-    initialRouteName: 'AdminHome'
+    initialRouteName: 'StaffHome'
   })
 
 export default createAppContainer(TabStack)

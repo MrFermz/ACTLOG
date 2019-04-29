@@ -19,15 +19,6 @@ import StdViewVisit from './Student/Visit/ViewVisit'
 import StdComment from './Student/Comment/CommentScreen'
 import StdDetail from './Student/DetailScreen'
 import StdEditDetail from './Student/EditDetailScreen'
-import StdSelCom from './Student/Company/SelectCompany'
-import StdAddCom from './Student/Company/AddCompany'
-
-//admin side
-import AdminHome from './Admin/index'
-import AdminUserType from './Admin/UserType/UserTypeScreen'
-import AdminTypeEdit from './Admin/UserType/UserTypeEdit'
-import AdminListStd from './Admin/Student/GetListStd'
-import AdminListTeacher from './Admin/Teacher/GetListTeacher'
 
 //teacher side
 import TeachHome from './Teacher/index'
@@ -38,6 +29,17 @@ import TeachViewActivity from './Teacher/Activity/ViewActivityScreen'
 import TeachDetail from './Teacher/DetailScreen'
 import TeachEditDetail from './Teacher/EditDetailScreen'
 import TeachAddStudent from './Teacher/AddStudent/AddStudent'
+
+//staff side
+import StaffHome from './Staff/index'
+import StaffDetail from './Staff/DetailScreen'
+import StaffEditDetail from './Staff/EditDetailScreen'
+import StaffActivityList from './Staff/ActivityList/ActivityList'
+import StaffActivity from './Staff/Activity/ActivityScreen'
+import StaffAddComment from './Staff/Activity/AddComment'
+import StaffSaveScore from './Staff/ActivityList/SaveScore'
+import StaffAddStudent from './Staff/AddStudent/AddStudent'
+import StaffSelCom from './Staff/Company/SelectCompany'
 
 const RootStack = createStackNavigator({
   Login: {
@@ -96,38 +98,6 @@ const RootStack = createStackNavigator({
   StudentEditDetail: {
     screen: StdEditDetail
   },
-  StudentSelCom: {
-    screen: StdSelCom
-  },
-  StudentAddCom: {
-    screen: StdAddCom
-  },
-
-  // แอดมิน
-  Admin: {
-    screen: AdminHome,
-  },
-  AdminUserType: {
-    screen: AdminUserType,
-    navigationOptions: {
-      title: 'เพิ่มประเภทผู้ใช้'
-    }
-  },
-  AdminTypeEdit: {
-    screen: AdminTypeEdit
-  },
-  AdminListStd: {
-    screen: AdminListStd,
-    navigationOptions: {
-      title: 'รายชื่อนักศึกษา'
-    }
-  },
-  AdminListTeacher: {
-    screen: AdminListTeacher,
-    navigationOptions: {
-      title: 'รายชื่ออาจารย์'
-    }
-  },
 
   // อาาจารย์
   Teacher: {
@@ -169,6 +139,54 @@ const RootStack = createStackNavigator({
       title: 'เลือกนักศึกษา'
     }
   },
+
+  // staff
+  Staff: {
+    screen: StaffHome
+  },
+  StaffDetail: {
+    screen: StaffDetail,
+    navigationOptions: {
+      title: 'ข้อมูลส่วนตัว'
+    }
+  },
+  StaffEditDetail: {
+    screen: StaffEditDetail,
+    navigationOptions: {
+      title: 'แก้ไขข้อมูลส่วนตัว'
+    }
+  },
+  StaffActivityList: {
+    screen: StaffActivityList,
+    navigationOptions: {
+      title: 'ดูกิจกรรม'
+    }
+  },
+  StaffSaveScore: {
+    screen: StaffSaveScore
+  },
+  StaffActivity: {
+    screen: StaffActivity,
+    navigationOptions: {
+      title: 'ตรวจกิจกรรม'
+    }
+  },
+  StaffAddComment: {
+    screen: StaffAddComment
+  },
+  StaffAddStudent: {
+    screen: StaffAddStudent,
+    navigationOptions: {
+      title: 'เลือกนักศึกษา'
+    }
+  },
+  StaffSelCom: {
+    screen: StaffSelCom,
+    navigationOptions: {
+      title: 'เลือกที่ฝึกงาน'
+    }
+  },
+
 }, {
     initialRouteName: 'Login',
     defaultNavigationOptions: {
