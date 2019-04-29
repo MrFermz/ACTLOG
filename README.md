@@ -2,6 +2,19 @@
 
 ระบบบันทึกกิจกรรมนักศึกษาฝึกงานของสาขาวิทยาศาสตร์คอมพิวเตอร์
 
+### ความสามารถ
+* นักศึกษา
+  - บันทึกรายงานการปฏิบัติงานประจำวัน
+  - บันทึกการลงเวลาปฏิบัติงาน
+  - อัปโหลดภาพได้
+  - <img src="https://github.com/MrFermz/ACTLOG/blob/master/assets/Student.gif" width="250" height="450" />
+* อาจารย์
+  - ตรวจรายงานการปฏิบัติงาน
+  - บันทึกข้อเสนอแนะแก่นักศึกษาฝึกงาน 
+  - <img src="https://github.com/MrFermz/ACTLOG/blob/master/assets/Teacher.gif" width="250" height="450" />
+* แอดมิน
+  - จัดการข้อมูลพื้นฐานในระบบ
+
 ### ขั้นตอนติดตั้ง (Android)
 * ติดตั้ง [Node.js](https://nodejs.org) โหลดตัว LTS
 * เปิด CMD สั่งรัน ```npm install -g react-native-cli```
