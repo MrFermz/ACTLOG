@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import firebase from 'react-native-firebase'
 import {
   createAppContainer,
   createBottomTabNavigator,
@@ -7,7 +8,6 @@ import {
   NavigationActions
 } from 'react-navigation'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import firebase from 'react-native-firebase'
 
 import TeachHome from './HomeScreen'
 import TeachDetail from './DetailScreen'
@@ -20,7 +20,7 @@ class Logout extends Component {
         index: 0,
         actions: [NavigationActions.navigate({ routeName: 'Login' })],
       })
-      this.props.navigation.dispatch(resetAction);
+      this.props.navigation.dispatch(resetAction)
     })
   }
   render() {
@@ -38,7 +38,7 @@ const TabStack = createBottomTabNavigator({
       title: 'ข้อมูลส่วนตัว',
       tabBarIcon: ({ tintColor }) => (
         <Icon
-          name="info"
+          name='info'
           size={iconSize}
           color={tintColor} />
       )
@@ -50,7 +50,7 @@ const TabStack = createBottomTabNavigator({
       title: 'หน้าแรก',
       tabBarIcon: ({ tintColor }) => (
         <Icon
-          name="home"
+          name='home'
           size={iconSize}
           color={tintColor} />
       )
@@ -62,7 +62,7 @@ const TabStack = createBottomTabNavigator({
       title: 'ออกจากระบบ',
       tabBarIcon: ({ tintColor }) => (
         <Icon
-          name="sign-out-alt"
+          name='sign-out-alt'
           size={iconSize}
           color={tintColor} />
       )

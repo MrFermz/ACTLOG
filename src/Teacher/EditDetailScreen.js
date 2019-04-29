@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import firebase from 'react-native-firebase'
 import {
   View,
   Text,
@@ -7,11 +8,10 @@ import {
   TouchableOpacity,
   Alert
 } from 'react-native'
+import styles from '../styles'
 import ImagePicker from 'react-native-image-picker'
 import { Avatar } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import firebase from 'react-native-firebase'
-import styles from '../styles'
 
 const options = {
   title: 'เลือกรูปภาพ',
@@ -79,8 +79,8 @@ class EditDetailScreen extends Component {
   saveDetail() {
     const { fname, lname, telNum } = this.state
     var uid = firebase.auth().currentUser.uid
-    detail = firebase.database().ref('users/' + uid)
-    detail.update({
+
+    firebase.database().ref(`users/${uid}`).update({
       fname: fname,
       lname: lname,
       telNum: telNum,
@@ -111,7 +111,7 @@ class EditDetailScreen extends Component {
       const imageRef = firebase
         .storage()
         .ref(`avatar/${uid}`)
-        .child('avatar.jpg');
+        .child('avatar.jpg')
       let mime = 'image/jpg'
 
       imageRef
@@ -131,11 +131,11 @@ class EditDetailScreen extends Component {
 
   saveUrl(url) {
     var uid = firebase.auth().currentUser.uid
-    firebase.database().ref(`users/${uid}`)
-      .update({ avatar: url })
-      .then(() => {
-        Alert.alert('อัพโหลดรูปโปรไฟล์เสร็จแล้ว!')
-      })
+    firebase.database().ref(`users/${uid}`).update({
+      avatar: url
+    }).then(() => {
+      Alert.alert('อัพโหลดรูปโปรไฟล์เสร็จแล้ว!')
+    })
   }
 
   render() {
@@ -148,8 +148,7 @@ class EditDetailScreen extends Component {
           onEditPress={() => this._pickImage()}
           showEditButton
           rounded
-          containerStyle={{ alignSelf: 'center', margin: 20 }}
-        />
+          containerStyle={{ alignSelf: 'center', margin: 20 }} />
         <TextInput
           style={styles.input.borderWithFont}
           placeholderTextColor='gray'

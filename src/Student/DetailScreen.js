@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import firebase from 'react-native-firebase'
 import {
   View,
   Text,
@@ -9,6 +10,7 @@ import {
   Picker,
   Modal
 } from 'react-native'
+import styles from '../styles'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import {
   Avatar,
@@ -16,8 +18,6 @@ import {
   Rating
 } from 'react-native-elements'
 import { NavigationEvents } from 'react-navigation'
-import firebase from 'react-native-firebase'
-import styles from '../styles'
 
 class DetailScreen extends Component {
   constructor(props) {
@@ -30,9 +30,12 @@ class DetailScreen extends Component {
       uuid: '',
       avatar: '',
       company: '',
+      companyId: '',
       modalVisible: false,
       score: '',
-      scoreButton: null
+      scoreButton: null,
+      dateStartPicker: '',
+      dateEndPicker: ''
     }
   }
 
@@ -41,31 +44,38 @@ class DetailScreen extends Component {
   }
 
   getDetail() {
-    var data
     var uid = firebase.auth().currentUser.uid
-    var users = firebase.database().ref('users/' + uid)
-    users.once('value').then(snapshot => {
-      data = snapshot.val()
-      this.setState({
-        uuid: uid,
-        sid: data.sid,
-        fname: data.fname,
-        lname: data.lname,
-        group: data.group,
-        subject: data.subject,
-        telNum: data.telNum,
-        email: data.email,
-        date: data.date,
-        sidStat: data.sidStat,
-        avatar: data.avatar,
-        company: data.company
+
+    firebase.database().ref(`users/${uid}`)
+      .once('value').then(snapshot => {
+        var data = snapshot.val()
+        // console.log(data.company)
+        firebase.database().ref(`company/${data.company}`)
+          .once('value').then((snapshot) => {
+            // console.log(snapshot.val().name)
+            this.setState({
+              uuid: uid,
+              sid: data.sid,
+              fname: data.fname,
+              lname: data.lname,
+              group: data.group,
+              subject: data.subject,
+              telNum: data.telNum,
+              email: data.email,
+              dateStartPicker: data.dateStart,
+              dateEndPicker: data.dateEnd,
+              sidStat: data.sidStat,
+              avatar: data.avatar,
+              company: snapshot.val().name,
+              companyId: data.company
+            })
+          })
+        // console.log(data)
       })
-      console.log(data)
-    })
   }
 
   editDetail() {
-    const { sid, fname, lname, group, subject, telNum, email, date, sidStat, uuid, avatar } = this.state
+    const { sid, fname, lname, group, subject, telNum, email, sidStat, uuid, avatar, dateStartPicker, dateEndPicker } = this.state
     this.props.navigation.navigate('StudentEditDetail', {
       sid: sid,
       fname: fname,
@@ -74,10 +84,11 @@ class DetailScreen extends Component {
       group: group,
       subject: subject,
       telNum: telNum,
-      date: date,
       sidStat: sidStat,
       uuid: uuid,
-      avatar: avatar
+      avatar: avatar,
+      dateStartPicker: dateStartPicker,
+      dateEndPicker: dateEndPicker
     })
   }
 
@@ -92,7 +103,7 @@ class DetailScreen extends Component {
         transparent={false}
         visible={this.state.modalVisible}
         onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
+          Alert.alert('Modal has been closed.')
         }}>
         <View style={{ marginTop: 22 }}>
           <View>
@@ -122,27 +133,27 @@ class DetailScreen extends Component {
   }
 
   saveScore() {
-    const { score, company } = this.state
+    const { score, companyId } = this.state
     var uid = firebase.auth().currentUser.uid
-    console.log(company, score)
-    firebase.database().ref(`company/${company}/score/${uid}`)
-      .update({
-        score: score
-      }).then(() => {
-        Alert.alert(
-          'แจ้งเตือน',
-          'บันทึกคะแนนสำเร็จ',
-          [
-            { text: 'ตกลง', onPress: () => this.setModalVisible(!this.state.modalVisible) }
-          ],
-          { cancelable: false }
-        )
-      })
+    console.log(companyId, score)
+    firebase.database().ref(`company/${companyId}/score/${uid}`).update({
+      score: score
+    }).then(() => {
+      Alert.alert(
+        'แจ้งเตือน',
+        'บันทึกคะแนนสำเร็จ',
+        [
+          { text: 'ตกลง', onPress: () => this.setModalVisible(!this.state.modalVisible) }
+        ],
+        { cancelable: false }
+      )
+    })
   }
 
   scoreButtonLoader() {
     const { scoreButton } = this.state
     var uid = firebase.auth().currentUser.uid
+
     firebase.database().ref(`users/${uid}/company`)
       .once('value').then((snapshot) => {
         var val = snapshot.val()
@@ -167,7 +178,10 @@ class DetailScreen extends Component {
   }
 
   render() {
-    const { sid, fname, lname, group, subject, telNum, email, date, avatar, score, company } = this.state
+    const { sid, fname, lname, group, subject, telNum, email, dateStartPicker, dateEndPicker, avatar, score, company } = this.state
+    var options = { year: 'numeric', month: 'long', day: 'numeric' }
+    var start = new Date(dateStartPicker).toLocaleDateString('th-TH', options)
+    var end = new Date(dateEndPicker).toLocaleDateString('th-TH', options)
     return (
       <View style={{ flex: 1 }}>
         <NavigationEvents onDidFocus={() => this.componentDidMount()} />
@@ -180,8 +194,7 @@ class DetailScreen extends Component {
                   source={{ uri: avatar }}
                   size='xlarge'
                   rounded
-                  containerStyle={{ alignSelf: 'center', margin: 20 }}
-                />
+                  containerStyle={{ alignSelf: 'center', margin: 20 }} />
 
                 <Text style={styles.label.header}>{fname + '  ' + lname}</Text>
 
@@ -243,7 +256,7 @@ class DetailScreen extends Component {
                     style={styles.icon.detail}
                     name='clock'
                     size={22} />
-                  <Text style={styles.label.detail}>{date}</Text>
+                  <Text style={styles.label.detail}>{`${start}\nถึง\n${end}`}</Text>
                 </View>
 
               </View>
@@ -261,4 +274,4 @@ class DetailScreen extends Component {
   }
 }
 
-export default DetailScreen;
+export default DetailScreen

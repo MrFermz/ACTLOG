@@ -1,23 +1,22 @@
 import React, { Component } from 'react'
+import firebase from 'react-native-firebase'
 import {
   View,
   Text,
   ScrollView,
   TouchableOpacity,
 } from 'react-native'
+import styles from '../../styles'
 import {
-  Card,
-  Rating
+  Card
 } from 'react-native-elements'
 import { NavigationEvents } from 'react-navigation'
-import firebase from 'react-native-firebase'
-import styles from '../../styles'
 
 class VisitScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      list: [],
+      list: []
     }
   }
 
@@ -26,34 +25,30 @@ class VisitScreen extends Component {
   }
 
   getList() {
-    var items = [], visit
-    var tuid = firebase.auth().currentUser.uid
-    var std = firebase.database().ref('users')
-    var visit = firebase.database().ref('visit')
+    var uid = firebase.auth().currentUser.uid
+    var items = []
 
-    visit.orderByChild('tuid').equalTo(tuid)
+    firebase.database().ref('visit')
+      .orderByChild('tuid')
+      .equalTo(uid)
       .once('value').then((snapshot) => {
         snapshot.forEach((child) => {
-          var suid = child.val().suid
-          var tuid = child.val().tuid
-          var stat = child.val().stat
+          var val = child.val()
           var key = child.key
-          if (stat == false) {
-            std.child(suid).once('value').then((snapshot) => {
-              var val = snapshot.val()
+          var suid = val.suid
+          firebase.database().ref(`users/${suid}`)
+            .once('value').then((snapshot) => {
+              var val1 = snapshot.val()
               items.push({
-                fname: val.fname,
-                lname: val.lname,
-                email: val.email,
-                sid: val.sid,
-                suid: val.uid,
-                tuid: tuid,
+                fname: val1.fname,
+                lname: val1.lname,
+                sid: val1.sid,
                 key: key,
-                score: child.val().rating
+                suid: suid,
+                tuid: uid
               })
               this.setState({ list: items })
             })
-          }
         })
       })
   }
@@ -65,51 +60,40 @@ class VisitScreen extends Component {
       <ScrollView style={styles.view.scrollView}>
         <NavigationEvents onDidFocus={() => this.componentDidMount()} />
         <View style={styles.view.container}>
-          {
-            list.map((user, i) => {
-              return (
-                <Card key={i} containerStyle={styles.view.cards}>
-                  <View style={styles.view.headerContainer}>
-                    <Text style={styles.label.header}>{user.fname}  {user.lname}</Text>
-                    <Text style={styles.label.sub}>{user.email}</Text>
-                    <Rating
-                      type='rocket'
-                      readonly
-                      count={5}
-                      fractions={1}
-                      startingValue={user.score}
-                      size={40}
-                    />
-                    <TouchableOpacity
-                      style={styles.button.sub}
-                      onPress={() =>
-                        this.props.navigation.navigate('TeachSaveVisit', {
-                          suid: user.suid,
-                          tuid: user.tuid,
-                          fname: user.fname,
-                          lname: user.lname,
-                          key: user.key,
-                          score: user.score
-                        })}>
-                      <Text style={styles.button.subLabel}>บันทึกนิเทศ</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.button.sub}
-                      onPress={() =>
-                        this.props.navigation.navigate('TeachActivity', {
-                          suid: user.suid,
-                        })}>
-                      <Text style={styles.button.subLabel}>ดูบันทึกกิจกรรม</Text>
-                    </TouchableOpacity>
-                  </View>
-                </Card>
-              )
-            })
-          }
+          {list.map((user, i) => {
+            return (
+              <Card key={i} containerStyle={styles.view.cards}>
+                <View style={styles.view.headerContainer}>
+                  <Text style={styles.label.header}>{user.fname}  {user.lname}</Text>
+                  <Text style={styles.label.sub}>{user.sid}</Text>
+                  <TouchableOpacity
+                    style={styles.button.sub}
+                    onPress={() =>
+                      this.props.navigation.navigate('TeachSaveVisit', {
+                        suid: user.suid,
+                        tuid: user.tuid,
+                        fname: user.fname,
+                        lname: user.lname,
+                        key: user.key
+                      })}>
+                    <Text style={styles.button.subLabel}>บันทึกนิเทศ</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.button.sub}
+                    onPress={() =>
+                      this.props.navigation.navigate('TeachActivity', {
+                        suid: user.suid,
+                      })}>
+                    <Text style={styles.button.subLabel}>ดูบันทึกกิจกรรม</Text>
+                  </TouchableOpacity>
+                </View>
+              </Card>
+            )
+          })}
         </View>
       </ScrollView>
     )
   }
 }
 
-export default VisitScreen;
+export default VisitScreen

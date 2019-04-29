@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import firebase from 'react-native-firebase'
 import {
   View,
   Text,
@@ -10,10 +11,9 @@ import {
   Modal,
   ActivityIndicator
 } from 'react-native'
+import styles from '../../styles'
 import ImagePicker from 'react-native-image-crop-picker'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import firebase from 'react-native-firebase'
-import styles from '../../styles'
 
 class AddActivity extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -61,7 +61,7 @@ class AddActivity extends Component {
     var key = navigation.getParam('key')
     console.log(key)
     uid = firebase.auth().currentUser.uid
-    timeTable = firebase.database().ref('timeTable/' + uid + '/' + key)
+    timeTable = firebase.database().ref(`timeTable/${uid}/${key}`)
     console.log(key)
     timeTable.update({
       morning: morning,
@@ -136,10 +136,10 @@ class AddActivity extends Component {
 
   saveUrl(url, key) {
     var uid = firebase.auth().currentUser.uid
-    firebase.database().ref(`timeTable/${uid}/${key}/photos`)
-      .push({ photo: url })
-      .then(() => {
-      })
+    firebase.database().ref(`timeTable/${uid}/${key}/photos`).push({
+      photo: url
+    }).then(() => {
+    })
   }
 
   render() {
@@ -168,8 +168,8 @@ class AddActivity extends Component {
           <Text style={styles.button.mainLabel}>อัพโหลดรูป</Text>
         </TouchableOpacity>
       </ScrollView>
-    );
+    )
   }
 }
 
-export default AddActivity;
+export default AddActivity

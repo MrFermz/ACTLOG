@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import firebase from 'react-native-firebase'
 import {
   View,
   Text,
@@ -6,14 +7,13 @@ import {
   TouchableOpacity,
   Alert
 } from 'react-native'
+import styles from '../styles'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import {
   Avatar,
   Card
 } from 'react-native-elements'
 import { NavigationEvents } from 'react-navigation'
-import firebase from 'react-native-firebase'
-import styles from '../styles'
 
 class DetailScreen extends Component {
   constructor(props) {
@@ -33,21 +33,19 @@ class DetailScreen extends Component {
   }
 
   getList() {
-    var data
     var uid = firebase.auth().currentUser.uid
-    var users = firebase.database().ref('users/' + uid)
-    users.once('value').then(snapshot => {
-      data = snapshot.val()
-      this.setState({
-        fname: data.fname,
-        lname: data.lname,
-        email: data.email,
-        telNum: data.telNum,
-        uuid: uid,
-        avatar: data.avatar
+    firebase.database().ref(`users/${uid}`)
+      .once('value').then(snapshot => {
+        var data = snapshot.val()
+        this.setState({
+          fname: data.fname,
+          lname: data.lname,
+          email: data.email,
+          telNum: data.telNum,
+          uuid: uid,
+          avatar: data.avatar
+        })
       })
-      console.log(data)
-    })
   }
 
   editDetail() {
@@ -74,8 +72,8 @@ class DetailScreen extends Component {
                   source={{ uri: avatar }}
                   size='xlarge'
                   rounded
-                  containerStyle={{ alignSelf: 'center', margin: 20 }}
-                />
+                  containerStyle={{ alignSelf: 'center', margin: 20 }} />
+
                 <Text style={styles.label.header}>{fname + '  ' + lname}</Text>
 
                 <View style={styles.view.containerWithBorder}>
@@ -109,4 +107,4 @@ class DetailScreen extends Component {
   }
 }
 
-export default DetailScreen;
+export default DetailScreen

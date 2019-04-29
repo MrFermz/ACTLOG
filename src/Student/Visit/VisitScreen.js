@@ -28,74 +28,129 @@ class VisitScreen extends Component {
   }
 
   getList() {
-    var items = [], visit
     var suid = firebase.auth().currentUser.uid
-    var std = firebase.database().ref('users')
-    var visit = firebase.database().ref('visit')
+    var items = []
 
-    visit.orderByChild('suid').equalTo(suid)
+    firebase.database().ref('visit')
+      .orderByChild('suid')
+      .equalTo(suid)
       .once('value').then((snapshot) => {
         snapshot.forEach((child) => {
-          var suid = child.val().suid
-          var tuid = child.val().tuid
-          var stat = child.val().stat
-          var key = child.key
-          console.log(`${suid} ${tuid} ${stat}`)
-          if (stat == false) {
-            std.child(tuid).once('value').then((snapshot) => {
-              var val = snapshot.val()
+          var val = child.val()
+          firebase.database().ref(`users/${val.tuid}`)
+            .once('value').then((snapshot) => {
+              var val1 = snapshot.val()
               items.push({
-                fname: val.fname,
-                lname: val.lname,
-                email: val.email,
-                sid: val.sid,
-                uid: val.uid,
-                comment: child.val().comment,
-                key: key,
-                score: child.val().rating
+                fname: val1.fname,
+                lname: val1.lname,
+                email: val1.email,
+                comment: val.comment,
+                score1: val.score1,
+                score2: val.score2,
+                score3: val.score3,
+                score4: val.score4,
+                score5: val.score5,
               })
               this.setState({ list: items })
             })
-          }
         })
       })
   }
 
   render() {
     const { list } = this.state
-    // console.log(list)
     return (
       <ScrollView style={styles.view.scrollView}>
-        {
-          list.map((user, i) => {
-            return (
-              <View style={styles.view.container}>
-                <Card key={i} containerStyle={styles.view.cards}>
-                  <View style={styles.view.headerContainer}>
-                    <Text style={styles.label.header}>{user.fname}  {user.lname}</Text>
-                    <Text style={styles.label.sub}>{user.email}</Text>
+        {list.map((user, i) => {
+          return (
+            <View style={styles.view.container}>
+              <Card key={i} containerStyle={styles.view.cards}>
+                <View style={styles.view.headerContainer}>
+                  <Text style={styles.label.header}>{user.fname}  {user.lname}</Text>
+                  <Text style={styles.label.sub}>{user.email}</Text>
+                  <View style={{ marginTop: 40 }}>
+                    <Text style={{
+                      alignSelf: 'center',
+                      fontSize: 17,
+                      marginBottom: 5
+                    }}>ความรับผิดชอบต่องานที่ได้รับมอบหมาย</Text>
                     <Rating
-                      type='rocket'
+                      key={i}
                       readonly
                       count={5}
                       fractions={1}
-                      startingValue={user.score}
-                      size={40}
-                    />
-                    <Text style={styles.label.visitComment}>{user.comment}</Text>
-                    <TouchableOpacity
-                      onPress={() => this.props.navigation.navigate('StudentViewVisit', {
-                        key: user.key
-                      })}
-                      style={styles.button.sub}>
-                      <Text style={styles.button.subLabel}>ดูเพิ่มเติม</Text>
-                    </TouchableOpacity>
+                      startingValue={user.score1}
+                      size={40} />
                   </View>
-                </Card>
-              </View>
-            )
-          })
-        }
+                  <View style={{ marginTop: 40 }}>
+                    <Text style={{
+                      alignSelf: 'center',
+                      fontSize: 17,
+                      marginBottom: 5
+                    }}>มีความรอบคอบในการทำงาน</Text>
+                    <Rating
+                      key={i}
+                      readonly
+                      count={5}
+                      fractions={1}
+                      startingValue={user.score2}
+                      size={40} />
+                  </View>
+                  <View style={{ marginTop: 40 }}>
+                    <Text style={{
+                      alignSelf: 'center',
+                      fontSize: 17,
+                      marginBottom: 5
+                    }}>มีมนุษย์สัมพันธ์</Text>
+                    <Rating
+                      key={i}
+                      readonly
+                      count={5}
+                      fractions={1}
+                      startingValue={user.score3}
+                      size={40} />
+                  </View>
+                  <View style={{ marginTop: 40 }}>
+                    <Text style={{
+                      alignSelf: 'center',
+                      fontSize: 17,
+                      marginBottom: 5
+                    }}>การตรงต่อเวลา</Text>
+                    <Rating
+                      key={i}
+                      readonly
+                      count={5}
+                      fractions={1}
+                      startingValue={user.score4}
+                      size={40} />
+                  </View>
+                  <View style={{ marginTop: 40 }}>
+                    <Text style={{
+                      alignSelf: 'center',
+                      fontSize: 17,
+                      marginBottom: 5
+                    }}>ปฏิบัติตนถูกต้องตามระเบียบข้อบังคับของสถานที่ฝึกงาน</Text>
+                    <Rating
+                      key={i}
+                      readonly
+                      count={5}
+                      fractions={1}
+                      startingValue={user.score5}
+                      size={40} />
+                  </View>
+                  <Text style={styles.label.visitComment}>{user.comment}</Text>
+                  <TouchableOpacity
+                    onPress={() => this.props.navigation.navigate('StudentViewVisit', {
+                      key: user.key
+                    })}
+                    style={styles.button.sub}>
+                    <Text style={styles.button.subLabel}>ดูรูปเพิ่มเติม</Text>
+                  </TouchableOpacity>
+                </View>
+              </Card>
+            </View>
+          )
+        })}
       </ScrollView>
     )
   }

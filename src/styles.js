@@ -77,6 +77,98 @@ const button = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center'
   },
+  actEdit: {
+    width: 226, height: 50,
+    backgroundColor: 'orange',
+    marginTop: 6,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center'
+  },
+  actMorning: {
+    width: 110, height: 50,
+    backgroundColor: 'orange',
+    borderBottomLeftRadius: 10,
+    marginTop: 6,
+    marginRight: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center'
+  },
+  actAfternoon: {
+    width: 110, height: 50,
+    backgroundColor: 'orange',
+    borderBottomRightRadius: 10,
+    marginTop: 6,
+    marginLeft: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center'
+  },
+
+  //ปกติ[0 #82E0AA] ขาด[1 #F1948A] สาย[2 #F8C471] ป่วย[3 #BB8FCE] ลา[4 #85C1E9] 
+  subStatWait: {
+    width: 120, height: 60,
+    borderRadius: 30,
+    backgroundColor: '#EAECEE',
+    marginTop: 15,
+    marginRight: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center'
+  },
+  subStat: {
+    width: 60, height: 60,
+    borderRadius: 30,
+    backgroundColor: '#82E0AA',
+    marginTop: 15,
+    marginRight: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center'
+  },
+  subStat1: {
+    width: 60, height: 60,
+    borderRadius: 30,
+    backgroundColor: '#F1948A',
+    marginTop: 15,
+    marginRight: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center'
+  },
+  subStat2: {
+    width: 60, height: 60,
+    borderRadius: 30,
+    backgroundColor: '#F8C471',
+    marginTop: 15,
+    marginRight: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center'
+  },
+  subStat3: {
+    width: 60, height: 60,
+    borderRadius: 30,
+    backgroundColor: '#BB8FCE',
+    marginTop: 15,
+    marginRight: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center'
+  },
+  subStat4: {
+    width: 60, height: 60,
+    borderRadius: 30,
+    backgroundColor: '#85C1E9',
+    marginTop: 15,
+    marginRight: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center'
+  },
   subLabel: {
     color: 'black',
     fontSize: 20
@@ -85,18 +177,16 @@ const button = StyleSheet.create({
     backgroundColor: '#34495E',
     width: 110, height: 35,
     justifyContent: 'center',
-    borderBottomLeftRadius: 10,
     borderTopLeftRadius: 10,
     marginLeft: 10,
-    marginRight: 1
+    marginRight: 3
   },
   timeButtonRight: {
     backgroundColor: '#34495E',
     width: 110, height: 35,
     justifyContent: 'center',
-    borderBottomRightRadius: 10,
     borderTopRightRadius: 10,
-    marginLeft: 1,
+    marginLeft: 3,
     marginRight: 10
   },
   headerRight: {

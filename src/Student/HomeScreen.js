@@ -6,40 +6,16 @@ import {
   Alert,
   Image
 } from 'react-native'
-import firebase from 'react-native-firebase'
-import Icon from 'react-native-vector-icons/FontAwesome5'
 import styles from '../styles'
+import Icon from 'react-native-vector-icons/FontAwesome5'
 
 class HomeScreen extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      img: ''
-    }
-  }
-
   TimeTable() {
     this.props.navigation.navigate('StudentTimeTable')
   }
 
   Visit() {
     this.props.navigation.navigate('StudentVisit')
-  }
-
-  SelectCom() {
-    this.props.navigation.navigate('StudentSelCom')
-  }
-
-  upload() {
-    var storage = firebase.storage()
-    var pathReference = storage.ref('uploads/logo.png')
-    pathReference.getDownloadURL().then((url) => {
-      Alert.alert(url)
-      ref.push().set({
-        imgurl: url
-      })
-      this.setState({ img: imgurl })
-    })
   }
 
   render() {
@@ -52,8 +28,7 @@ class HomeScreen extends Component {
           <Icon
             name='table'
             size={icoSize}
-            style={styles.icon.color}
-          />
+            style={styles.icon.color} />
           <Text style={styles.label.homeMenu}>ตารางลงเวลา</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -62,21 +37,9 @@ class HomeScreen extends Component {
           <Icon
             name='suitcase-rolling'
             size={icoSize}
-            style={styles.icon.color}
-          />
+            style={styles.icon.color} />
           <Text style={styles.label.homeMenu}>ดูผลการนิเทศ</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.icon.homeMenuContainer}
-          onPress={() => this.SelectCom(this)}>
-          <Icon
-            name='building'
-            size={icoSize}
-            style={styles.icon.color}
-          />
-          <Text style={styles.label.homeMenu}>เลือกที่ฝึกงาน</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.icon.homeMenuContainer} />
       </View>
     )
   }

@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
+import firebase from 'react-native-firebase'
 import {
   View,
   Text,
   TouchableOpacity,
 } from 'react-native'
+import styles from '../styles'
 import {
   StackActions,
   NavigationActions
 } from 'react-navigation'
-import firebase from 'react-native-firebase'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import styles from '../styles'
 
 class HomeScreen extends Component {
 
@@ -33,7 +33,7 @@ class HomeScreen extends Component {
         index: 0,
         actions: [NavigationActions.navigate({ routeName: 'Login' })],
       })
-      this.props.navigation.dispatch(resetAction);
+      this.props.navigation.dispatch(resetAction)
     })
   }
 
@@ -47,8 +47,7 @@ class HomeScreen extends Component {
           <Icon
             name='book'
             size={icoSize}
-            style={styles.icon.color}
-          />
+            style={styles.icon.color} />
           <Text style={styles.label.homeMenu}>บันทึกนิเทศ</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -57,13 +56,12 @@ class HomeScreen extends Component {
           <Icon
             name='user-plus'
             size={icoSize}
-            style={styles.icon.color}
-          />
+            style={styles.icon.color} />
           <Text style={styles.label.homeMenu}>เพิ่มนักศึกษา</Text>
         </TouchableOpacity>
       </View>
-    );
+    )
   }
 }
 
-export default HomeScreen;
+export default HomeScreen

@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
+import firebase from 'react-native-firebase'
 import {
   View,
   Text,
   ScrollView,
   Image
 } from 'react-native'
+import styles from '../../styles'
 import {
   Card,
 } from 'react-native-elements'
-import firebase from 'react-native-firebase'
-import styles from '../../styles'
 
 class CheckActivityScreen extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -37,7 +37,9 @@ class CheckActivityScreen extends Component {
       .once('value').then((snapshot) => {
         snapshot.forEach((child) => {
           console.log(child.val().photo)
-          items.push({ photo: child.val().photo })
+          items.push({
+            photo: child.val().photo
+          })
         })
         this.setState({ list: items })
       })
@@ -45,7 +47,7 @@ class CheckActivityScreen extends Component {
 
   render() {
     const { list } = this.state
-    console.log(list)
+    // console.log(list)
     var ACT = this.props.navigation.getParam('ACT')
     return (
       <ScrollView style={styles.view.scrollView}>
@@ -54,22 +56,20 @@ class CheckActivityScreen extends Component {
             <View style={styles.label.header}>
               <Text style={styles.label.sub}>{ACT}</Text>
             </View>
-            {
-              list.map((user, i) => {
-                return (
-                  <Card key={i}>
-                    <Image
-                      style={{ width: '100%', height: 300 }}
-                      source={{ uri: user.photo }} />
-                  </Card>
-                )
-              })
-            }
+            {list.map((user, i) => {
+              return (
+                <Card key={i}>
+                  <Image
+                    style={{ width: '100%', height: 300 }}
+                    source={{ uri: user.photo }} />
+                </Card>
+              )
+            })}
           </Card>
         </View>
       </ScrollView>
-    );
+    )
   }
 }
 
-export default CheckActivityScreen;
+export default CheckActivityScreen

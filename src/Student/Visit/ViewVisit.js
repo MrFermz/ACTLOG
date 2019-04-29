@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
+import firebase from 'react-native-firebase'
 import {
   ScrollView,
   Image,
   Text
 } from 'react-native'
-import { Card } from 'react-native-elements'
-import firebase from 'react-native-firebase'
 import styles from '../../styles'
+import { Card } from 'react-native-elements'
 
 class ViewVisit extends Component {
   constructor(props) {
@@ -27,8 +27,10 @@ class ViewVisit extends Component {
     firebase.database().ref(`visit/${key}/photos`)
       .once('value').then((snapshot) => {
         snapshot.forEach((child) => {
-          console.log(child.val().photo)
-          items.push({ photo: child.val().photo })
+          // console.log(child.val().photo)
+          items.push({
+            photo: child.val().photo
+          })
         })
         this.setState({ list: items })
       })
@@ -38,17 +40,15 @@ class ViewVisit extends Component {
     const { list } = this.state
     return (
       <ScrollView>
-        {
-          list.map((user, i) => {
-            return (
-              <Card key={i}>
-                <Image
-                  style={{ width: '100%', height: 300 }}
-                  source={{ uri: user.photo }} />
-              </Card>
-            )
-          })
-        }
+        {list.map((user, i) => {
+          return (
+            <Card key={i}>
+              <Image
+                style={{ width: '100%', height: 300 }}
+                source={{ uri: user.photo }} />
+            </Card>
+          )
+        })}
       </ScrollView>
     )
   }

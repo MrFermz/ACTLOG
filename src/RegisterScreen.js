@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import firebase from 'react-native-firebase'
 import {
   Text,
   ScrollView,
@@ -8,22 +9,21 @@ import {
   Button,
   Picker
 } from 'react-native'
+import styles from './styles'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { Input } from 'react-native-elements'
-import firebase from 'react-native-firebase'
-import styles from './styles'
 
 class RegisterScreen extends Component {
   constructor(props) {
     super(props)
-    this.state = ({
+    this.state = {
       email: '',
       password: '',
       rePassword: '',
       loading: false,
       error: '',
       type: ''
-    })
+    }
   }
 
   onRegisterPressed() {
@@ -36,7 +36,7 @@ class RegisterScreen extends Component {
           .then(() => {
             var year = new Date().getFullYear()
             var uid = firebaseAuth.currentUser.uid
-            firebase.database().ref('users/' + uid).set({
+            firebase.database().ref(`users/${uid}`).set({
               uid: uid,
               email: email,
               fname: 'ชื่อจริง',
@@ -119,8 +119,7 @@ class RegisterScreen extends Component {
             <Icon
               name='user-alt'
               size={icoSize}
-              style={styles.icon.color}
-            />
+              style={styles.icon.color} />
           }
           placeholder='อีเมลล์' />
         <Input
@@ -137,8 +136,7 @@ class RegisterScreen extends Component {
             <Icon
               name='key'
               size={icoSize}
-              style={styles.icon.color}
-            />
+              style={styles.icon.color} />
           }
           placeholder='รหัสผ่าน' />
         <Input
@@ -155,22 +153,18 @@ class RegisterScreen extends Component {
             <Icon
               name='key'
               size={icoSize}
-              style={styles.icon.color}
-            />
+              style={styles.icon.color} />
           }
           placeholder='รหัสผ่านอีกครั้ง' />
         <Picker
           selectedValue={this.state.type}
           mode='dialog'
-          style={{
-            height: 50, width: '90%', alignSelf: 'center', marginTop: 10,
-          }}
-          onValueChange={(value, index) =>
-            this.setState({ type: value })
-          }>
-          <Picker.Item label="- เลือกประเภทผู้ใช้ -" value='none' />
-          <Picker.Item label="นักศึกษา" value="Student" />
-          <Picker.Item label="อาจารย์" value="Teacher" />
+          style={{ height: 50, width: '90%', alignSelf: 'center', marginTop: 10 }}
+          onValueChange={(value, i) => this.setState({ type: value })}>
+          <Picker.Item label='- เลือกประเภทผู้ใช้ -' value='none' />
+          <Picker.Item label='นักศึกษา' value='Student' />
+          <Picker.Item label='อาจารย์' value='Teacher' />
+          <Picker.Item label='ผูดูแล' value='Staff' />
         </Picker>
         <Text style={styles.error.password}>{this.state.error}</Text>
         {this.buttonLoader()}
@@ -179,4 +173,4 @@ class RegisterScreen extends Component {
   }
 }
 
-export default RegisterScreen;
+export default RegisterScreen

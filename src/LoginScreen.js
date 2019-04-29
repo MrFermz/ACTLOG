@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import firebase from 'react-native-firebase'
 import {
   View,
   Alert,
@@ -7,14 +8,13 @@ import {
   ActivityIndicator,
   Image
 } from 'react-native'
+import styles from './styles'
 import {
   StackActions,
   NavigationActions
 } from 'react-navigation'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { Input } from 'react-native-elements'
-import firebase from 'react-native-firebase'
-import styles from './styles'
 
 class LoginScreen extends Component {
   constructor(props) {
@@ -36,17 +36,15 @@ class LoginScreen extends Component {
   }
 
   onLoginPressed() {
-    const { email, password } = this.state;
+    const { email, password } = this.state
     this.setState({ loading: true })
     if (email && password && (email != '' || password != '')) {
       firebase.auth().signInWithEmailAndPassword(email, password)
-        .then(() => {
-          firebase.auth().onAuthStateChanged((user) => {
-            this.setState({ loading: false })
-            // if (user.emailVerified) {
-              this.getUserType()
-            // }
-          })
+        .then((user) => {
+          // if (user.user.emailVerified) {
+          this.getUserType()
+          // }
+          this.setState({ loading: false })
         })
         .catch((msgError) => {
           this.setState({ loading: false })
@@ -67,31 +65,32 @@ class LoginScreen extends Component {
 
   getUserType() {
     var uid = firebase.auth().currentUser.uid
-    var typeStat = firebase.database().ref(`users/${uid}/typeStat`)
+
     this.setState({ type: '' })
-    typeStat.once('value').then((snapshot) => {
-      if (snapshot.val() == false) {
-        this.setState({ loading: false })
-      } else {
-        firebase.database().ref(`users/${uid}`)
-          .once('value').then((snapshot) => {
-            var currYear = new Date().getFullYear()
-            var val = snapshot.val().type
-            var setup = snapshot.val().setup
-            var year = snapshot.val().year
-            console.log(currYear, year)
-            this.setState({ type: val })
-            if (this.state.type == val && this.state.type != 'none') {
-              if ((currYear == year && val == 'Student') || val == 'Teacher' || val == 'Admin') {
-                this.goHomeScreen(val, setup)
-              } else {
-                Alert.alert('invalid years.')
+    firebase.database().ref(`users/${uid}/typeStat`)
+      .once('value').then((snapshot) => {
+        if (snapshot.val() == false) {
+          this.setState({ loading: false })
+        } else {
+          firebase.database().ref(`users/${uid}`)
+            .once('value').then((snapshot) => {
+              var currYear = new Date().getFullYear()
+              var val = snapshot.val().type
+              var setup = snapshot.val().setup
+              var year = snapshot.val().year
+              console.log(currYear, year)
+              this.setState({ type: val })
+              if (this.state.type == val && this.state.type != 'none') {
+                if ((val == 'Student') || val == 'Teacher' || val == 'Admin' || val == 'Staff') {
+                  this.goHomeScreen(val, setup)
+                } else {
+                  Alert.alert('invalid years.')
+                }
               }
-            }
-            this.setState({ loading: false })
-          })
-      }
-    })
+              this.setState({ loading: false })
+            })
+        }
+      })
   }
 
   goHomeScreen(type, setup) {

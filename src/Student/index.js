@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import firebase from 'react-native-firebase'
 import {
   createAppContainer,
   createBottomTabNavigator,
@@ -7,7 +8,6 @@ import {
   NavigationActions,
 } from 'react-navigation'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import firebase from 'react-native-firebase'
 
 import StdHome from './HomeScreen'
 import StdDetail from './DetailScreen'
@@ -23,6 +23,7 @@ class Logout extends Component {
       this.props.navigation.dispatch(resetAction)
     })
   }
+
   render() {
     return [
       this.Logout()
@@ -38,7 +39,7 @@ const TabStack = createBottomTabNavigator({
       title: 'ข้อมูลส่วนตัว',
       tabBarIcon: ({ tintColor }) => (
         <Icon
-          name="info-circle"
+          name='info-circle'
           size={iconSize}
           color={tintColor} />
       )
@@ -50,7 +51,7 @@ const TabStack = createBottomTabNavigator({
       title: 'หน้าแรก',
       tabBarIcon: ({ tintColor }) => (
         <Icon
-          name="home"
+          name='home'
           size={iconSize}
           color={tintColor} />
       )
@@ -62,7 +63,7 @@ const TabStack = createBottomTabNavigator({
       title: 'ออกจากระบบ',
       tabBarIcon: ({ tintColor }) => (
         <Icon
-          name="sign-out-alt"
+          name='sign-out-alt'
           size={iconSize}
           color={tintColor} />
       )

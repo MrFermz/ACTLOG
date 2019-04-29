@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import firebase from 'react-native-firebase'
 import {
   View,
   Text,
@@ -7,11 +8,10 @@ import {
   Image,
   Alert
 } from 'react-native'
+import styles from '../../styles'
 import { Card } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { NavigationEvents } from 'react-navigation'
-import firebase from 'react-native-firebase'
-import styles from '../../styles'
 
 class ActivityScreen extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -53,24 +53,25 @@ class ActivityScreen extends Component {
   }
 
   getList() {
-    var uid, table, items = []
+    var uid, items = []
     var date = this.props.navigation.getParam('date')
     var key = this.props.navigation.getParam('key')
-    var photos = firebase.database()
     console.log(date)
     console.log(key)
     uid = firebase.auth().currentUser.uid
-    table = firebase.database().ref('timeTable/' + uid + '/' + key)
-    table.once('value').then(snapshot => {
-      child = snapshot.val()
-      this.setState({
-        key: key,
-        date: date,
-        morning: child.morning,
-        afternoon: child.afternoon
+
+    firebase.database().ref(`timeTable/${uid}/${key}`)
+      .once('value').then(snapshot => {
+        child = snapshot.val()
+        this.setState({
+          key: key,
+          date: date,
+          morning: child.morning,
+          afternoon: child.afternoon
+        })
       })
-    })
-    photos.ref(`timeTable/${uid}/${key}/photos`)
+
+    firebase.database().ref(`timeTable/${uid}/${key}/photos`)
       .once('value').then((snapshot) => {
         snapshot.forEach((child) => {
           items.push({
@@ -83,7 +84,7 @@ class ActivityScreen extends Component {
 
   render() {
     const { date, morning, afternoon, list } = this.state
-    console.log(list)
+    // console.log(list)
     return (
       <ScrollView style={styles.view.scrollView}>
         <NavigationEvents onDidFocus={() => this.componentDidMount()} />
@@ -98,20 +99,18 @@ class ActivityScreen extends Component {
             </View>
           </Card>
         </View>
-        {
-          list.map((p, i) => {
-            return (
-              <Card key={i}>
-                <Image
-                  style={{ width: '100%', height: 300 }}
-                  source={{ uri: p.photo }} />
-              </Card>
-            )
-          })
-        }
+        {list.map((p, i) => {
+          return (
+            <Card key={i}>
+              <Image
+                style={{ width: '100%', height: 300 }}
+                source={{ uri: p.photo }} />
+            </Card>
+          )
+        })}
       </ScrollView>
     )
   }
 }
 
-export default ActivityScreen;
+export default ActivityScreen

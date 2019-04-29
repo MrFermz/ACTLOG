@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import firebase from 'react-native-firebase'
 import {
   View,
   ScrollView,
@@ -6,14 +7,13 @@ import {
   TextInput,
   Alert
 } from 'react-native'
+import styles from './styles'
 import {
   StackActions,
   NavigationActions
 } from 'react-navigation'
 import ImagePicker from 'react-native-image-picker'
 import { Avatar, Icon } from 'react-native-elements'
-import firebase from 'react-native-firebase'
-import styles from './styles'
 
 const options = {
   title: 'เลือกรูปภาพ',
@@ -69,24 +69,23 @@ class Setup extends Component {
     var type = this.props.navigation.getParam('type')
     var uid = firebase.auth().currentUser.uid
     if (fname && lname) {
-      firebase.database().ref(`users/${uid}`)
-        .update({
-          sid: sid,
-          fname: fname,
-          lname: lname,
-          group: group,
-          telNum: telNum,
-          setup: false,
-          date: date
-        }).then(() => {
-          const resetAction = StackActions.reset({
-            index: 0,
-            actions: [NavigationActions.navigate({
-              routeName: type
-            })]
-          })
-          this.props.navigation.dispatch(resetAction)
+      firebase.database().ref(`users/${uid}`).update({
+        sid: sid,
+        fname: fname,
+        lname: lname,
+        group: group,
+        telNum: telNum,
+        setup: false,
+        date: date
+      }).then(() => {
+        const resetAction = StackActions.reset({
+          index: 0,
+          actions: [NavigationActions.navigate({
+            routeName: type
+          })]
         })
+        this.props.navigation.dispatch(resetAction)
+      })
     } else {
       Alert.alert(
         'แจ้งเตือน',
@@ -112,7 +111,7 @@ class Setup extends Component {
       const imageRef = firebase
         .storage()
         .ref(`avatar/${uid}`)
-        .child('avatar.jpg');
+        .child('avatar.jpg')
       let mime = 'image/jpg'
 
       imageRef
@@ -132,8 +131,7 @@ class Setup extends Component {
 
   saveUrl(url) {
     var uid = firebase.auth().currentUser.uid
-    firebase.database().ref(`users/${uid}`)
-      .update({ avatar: url })
+    firebase.database().ref(`users/${uid}`).update({ avatar: url })
       .then(() => {
         Alert.alert(
           'แจ้งเตือน',
@@ -232,8 +230,7 @@ class Setup extends Component {
           onEditPress={() => this._pickImage()}
           showEditButton
           rounded
-          containerStyle={{ alignSelf: 'center', margin: 20 }}
-        />
+          containerStyle={{ alignSelf: 'center', margin: 20 }} />
         {this.inputLoader(type)}
       </ScrollView>
     )
