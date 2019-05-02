@@ -117,7 +117,7 @@ class TimeTableScreen extends Component {
     }
   }
 
-  timeStampCome = (timeCome, key) => {
+  timeStampCome = (timeCome, key, date) => {
     var uid, hour, minute, timeStamp
     uid = firebase.auth().currentUser.uid
 
@@ -125,18 +125,31 @@ class TimeTableScreen extends Component {
     minute = new Date().getMinutes()
     timeStamp = hour + ':' + minute
 
-    if (timeCome == 'ลงเวลามา') {
+    var now = new Date()
+    var year = now.getFullYear()
+    var month = now.getMonth() + 1
+    var day = now.getDate()
+    now = year + '-' + month + '-' + day
+
+    if ((timeCome == 'ลงเวลามา') && (date == now)) {
       firebase.database().ref(`timeTable/${uid}/${key}`).update({
         timeCome: timeStamp
       }).then(() => {
         this.componentDidMount()
       })
     } else {
-      Alert.alert('ลงเวลามาแล้ว')
+      Alert.alert(
+        'แจ้งเตือน',
+        'ลงเวลามาแล้ว !',
+        [
+          { text: 'ตกลง' },
+        ],
+        { cancelable: false },
+      )
     }
   }
 
-  timeStampBack = (timeBack, key) => {
+  timeStampBack = (timeBack, key, date) => {
     var uid, hour, minute, timeStamp
     uid = firebase.auth().currentUser.uid
 
@@ -144,14 +157,28 @@ class TimeTableScreen extends Component {
     minute = new Date().getMinutes()
     timeStamp = hour + ':' + minute
 
-    if (timeBack == 'ลงเวลากลับ') {
+    var now = new Date()
+    var year = now.getFullYear()
+    var month = now.getMonth() + 1
+    var day = now.getDate()
+    now = year + '-' + month + '-' + day
+    console.log(date, now)
+
+    if ((timeBack == 'ลงเวลากลับ') && (date == now)) {
       firebase.database().ref(`timeTable/${uid}/${key}`).update({
         timeBack: timeStamp
       }).then(() => {
         this.componentDidMount()
       })
     } else {
-      Alert.alert('ลงเวลากลับแล้ว')
+      Alert.alert(
+        'แจ้งเตือน',
+        'ลงเวลากลับแล้ว !',
+        [
+          { text: 'ตกลง' },
+        ],
+        { cancelable: false },
+      )
     }
   }
 
@@ -234,13 +261,13 @@ class TimeTableScreen extends Component {
 
                     <TouchableOpacity
                       style={styles.button.timeButtonLeft}
-                      onPress={() => this.timeStampCome(user.timeCome, user.key)}>
+                      onPress={() => this.timeStampCome(user.timeCome, user.key, user.date)}>
                       <Text style={styles.label._sub}>{user.timeCome}</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
                       style={styles.button.timeButtonRight}
-                      onPress={() => this.timeStampBack(user.timeBack, user.key)}>
+                      onPress={() => this.timeStampBack(user.timeBack, user.key, user.date)}>
                       <Text style={styles.label._sub}>{user.timeBack}</Text>
                     </TouchableOpacity>
 

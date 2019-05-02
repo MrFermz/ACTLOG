@@ -147,7 +147,7 @@ class LoginScreen extends Component {
           resizeMode='center'
           style={{ width: 220, height: 220 }}
           source={require('../assets/logo.png')} />
-        <Text>1.3.1</Text>
+        <Text>1.4.0</Text>
         <Input
           containerStyle={styles.input.container}
           inputContainerStyle={styles.input.inputContainer}
