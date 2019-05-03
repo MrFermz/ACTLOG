@@ -48,6 +48,21 @@ class DetailScreen extends Component {
     firebase.database().ref(`users/${uid}`)
       .once('value').then(snapshot => {
         var data = snapshot.val()
+        this.setState({
+          uuid: uid,
+          sid: data.sid,
+          fname: data.fname,
+          lname: data.lname,
+          group: data.group,
+          subject: data.subject,
+          telNum: data.telNum,
+          email: data.email,
+          dateStartPicker: data.dateStart,
+          dateEndPicker: data.dateEnd,
+          sidStat: data.sidStat,
+          avatar: data.avatar,
+          company: '-'
+        })
         firebase.database().ref('comment')
           .orderByChild('suid')
           .equalTo(uid)

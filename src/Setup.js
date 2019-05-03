@@ -55,8 +55,7 @@ class Setup extends Component {
       lname: null,
       group: '',
       telNum: '',
-      avatar: '',
-      date: ''
+      avatar: ''
     }
   }
 
@@ -65,27 +64,43 @@ class Setup extends Component {
   }
 
   saveDetail() {
-    const { sid, fname, lname, group, telNum, date } = this.state
+    const { sid, fname, lname, group, telNum } = this.state
     var type = this.props.navigation.getParam('type')
     var uid = firebase.auth().currentUser.uid
     if (fname && lname) {
-      firebase.database().ref(`users/${uid}`).update({
-        sid: sid,
-        fname: fname,
-        lname: lname,
-        group: group,
-        telNum: telNum,
-        setup: false,
-        date: date
-      }).then(() => {
-        const resetAction = StackActions.reset({
-          index: 0,
-          actions: [NavigationActions.navigate({
-            routeName: type
-          })]
+      if (type == 'Student') {
+        firebase.database().ref(`users/${uid}`).update({
+          sid: sid,
+          fname: fname,
+          lname: lname,
+          group: group,
+          telNum: telNum,
+          setup: false
+        }).then(() => {
+          const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({
+              routeName: type
+            })]
+          })
+          this.props.navigation.dispatch(resetAction)
         })
-        this.props.navigation.dispatch(resetAction)
-      })
+      } else if (type == 'Teacher' || type == 'Staff') {
+        firebase.database().ref(`users/${uid}`).update({
+          fname: fname,
+          lname: lname,
+          telNum: telNum,
+          setup: false,
+        }).then(() => {
+          const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({
+              routeName: type
+            })]
+          })
+          this.props.navigation.dispatch(resetAction)
+        })
+      }
     } else {
       Alert.alert(
         'แจ้งเตือน',
@@ -152,7 +167,7 @@ class Setup extends Component {
             style={styles.input.borderWithFont}
             placeholderTextColor='gray'
             placeholder='รหัสนักศึกษา'
-            keyboardType='number-pad'
+            keyboardType='number'
             onChangeText={(text) => this.setState({ sid: text })}
             autoCapitalize='none'
             autoCorrect={false} />
@@ -183,15 +198,9 @@ class Setup extends Component {
             onChangeText={(text) => this.setState({ telNum: text })}
             keyboardType='phone-pad'
             autoCorrect={false} />
-          <TextInput
-            style={styles.input.borderWithFont}
-            placeholderTextColor='gray'
-            placeholder='ระยะเวลาฝึกงาน'
-            onChangeText={(text) => this.setState({ date: text })}
-            autoCorrect={false} />
         </View>
       )
-    } else if (type = 'Teacher') {
+    } else if (type == 'Teacher' || type == 'Staff') {
       return (
         <View>
           <TextInput

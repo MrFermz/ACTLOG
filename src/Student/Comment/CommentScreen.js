@@ -4,6 +4,7 @@ import {
   View,
   Text,
   ScrollView,
+  TouchableOpacity
 } from 'react-native'
 import styles from '../../styles'
 import {
@@ -11,33 +12,58 @@ import {
 } from 'react-native-elements'
 
 class CommentScreen extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      date: '',
+      timeCome: '',
+      timeBack: '',
+      comment: ''
+    }
+  }
+
+  componentDidMount() {
+    this.getList()
+  }
+
+  getList() {
+    var key = this.props.navigation.getParam('key')
+    var uid = this.props.navigation.getParam('uid')
+    firebase.database().ref(`timeTable/${uid}/${key}`)
+      .once('value').then((snapshot) => {
+        var val = snapshot.val()
+        this.setState({
+          date: val.date,
+          timeCome: val.timeCome,
+          timeBack: val.timeBack,
+          comment: val.comment
+        })
+      })
+  }
+
   render() {
+    const { date, timeCome, timeBack, comment } = this.state
     return (
-      <View>
-        <Text>
-          Comment Screen
-        </Text>
-      </View>
-      // <ScrollView style={styles.common.scrollView}>
-      //   {comment.map((cm, i) => {
-      //       return (
-      //         <View key={i} style={styles.comment.container}>
-      //           <Card containerStyle={styles.common.card}>
-      //             <Text style={styles.comment.label}>{cm.staff}</Text>
-      //             <Text style={styles.comment.labelSub}>{cm.staffComment}</Text>
-      //           </Card>
-      //           <Card containerStyle={styles.common.card}>
-      //             <Text style={styles.comment.label}>{cm.boss}</Text>
-      //             <Text style={styles.comment.labelSub}>{cm.bossComment}</Text>
-      //           </Card>
-      //           <Card containerStyle={styles.common.card}>
-      //             <Text style={styles.comment.label}>{cm.subject}</Text>
-      //             <Text style={styles.comment.labelSub}>{cm.subComment}</Text>
-      //           </Card>
-      //         </View >
-      //       )
-      //     })}
-      // </ScrollView>
+      <ScrollView
+        style={styles.view.scrollView}>
+        <Card
+          containerStyle={styles.view.cards}>
+          <View style={styles.view.timeTableContainer}>
+            <Text style={styles.label.headerTimeTable}>{date}</Text>
+            <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+              <TouchableOpacity
+                style={styles.button.timeButtonLeft}>
+                <Text style={styles.label._sub}>{timeCome}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.button.timeButtonRight}>
+                <Text style={styles.label._sub}>{timeBack}</Text>
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.label.sub}>{comment}</Text>
+          </View>
+        </Card>
+      </ScrollView>
     )
   }
 }

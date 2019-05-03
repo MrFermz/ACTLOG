@@ -73,6 +73,15 @@ class AddComment extends Component {
     var suid = this.props.navigation.getParam('suid')
     firebase.database().ref(`timeTable/${suid}/${key}`).update({
       comment
+    }).then(() => {
+      Alert.alert(
+        'แจ้งเตือน',
+        'บันทึกความคิดเห็นแล้ว',
+        [
+          { text: 'ตกลง', onPress: () => this.props.navigation.goBack() },
+        ],
+        { cancelable: false },
+      )
     })
   }
 

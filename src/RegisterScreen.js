@@ -164,7 +164,7 @@ class RegisterScreen extends Component {
           <Picker.Item label='- เลือกประเภทผู้ใช้ -' value='none' />
           <Picker.Item label='นักศึกษา' value='Student' />
           <Picker.Item label='อาจารย์' value='Teacher' />
-          <Picker.Item label='ผูดูแล' value='Staff' />
+          <Picker.Item label='ผู้ดูแล' value='Staff' />
         </Picker>
         <Text style={styles.error.password}>{this.state.error}</Text>
         {this.buttonLoader()}

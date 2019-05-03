@@ -13,6 +13,7 @@ import {
   Card,
 } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import Icon2 from 'react-native-vector-icons/FontAwesome'
 
 class TimeTableScreen extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -29,7 +30,7 @@ class TimeTableScreen extends Component {
                 text: 'ยกเลิก',
                 style: 'cancel',
               },
-              { text: 'ตกลง', onPress: () => params.add() },
+              { text: 'เพิ่ม', onPress: () => params.add() },
             ],
             { cancelable: false },
           )}
@@ -63,15 +64,16 @@ class TimeTableScreen extends Component {
       .once('value').then(snapshot => {
         snapshot.forEach((childSnapshot) => {
           key = childSnapshot.key
-          // console.log(key)
           child = childSnapshot.val()
           currentDate = child.date
           items.push({
+            uid,
             key: key,
             date: child.date,
             timeCome: child.timeCome,
             timeBack: child.timeBack,
-            stat: child.stat
+            stat: child.stat,
+            comment: child.comment
           })
           this.setState({
             currentDate: currentDate,
@@ -110,7 +112,7 @@ class TimeTableScreen extends Component {
         'แจ้งเตือน',
         'วันนี้ลงตารางเวลาแล้ว !',
         [
-          { text: 'ตกลง' },
+          { text: 'ปิด' },
         ],
         { cancelable: false },
       )
@@ -142,7 +144,7 @@ class TimeTableScreen extends Component {
         'แจ้งเตือน',
         'ลงเวลามาแล้ว !',
         [
-          { text: 'ตกลง' },
+          { text: 'ปิด' },
         ],
         { cancelable: false },
       )
@@ -175,7 +177,7 @@ class TimeTableScreen extends Component {
         'แจ้งเตือน',
         'ลงเวลากลับแล้ว !',
         [
-          { text: 'ตกลง' },
+          { text: 'ปิด' },
         ],
         { cancelable: false },
       )
@@ -246,9 +248,36 @@ class TimeTableScreen extends Component {
     }
   }
 
+  onDelete(uid, key) {
+    const { list } = this.state
+    Alert.alert(
+      'แจ้งเตือน',
+      'แน่ใจที่จะลบ ?',
+      [
+        {
+          text: 'ยกเลิก',
+          style: 'cancel',
+        },
+        {
+          text: 'ลบ', onPress: () => {
+            firebase.database().ref(`timeTable/${uid}/${key}`)
+              .remove().then(() => {
+                if (list.length == 1) {
+                  this.props.navigation.goBack()
+                } else {
+                  this.componentDidMount()
+                }
+              })
+          }
+        },
+      ],
+      { cancelable: false },
+    )
+  }
+
   render() {
     const { list } = this.state
-    // console.log(list)
+    var icoSize = 30
     return (
       <View style={{ flex: 1, marginBottom: 20 }}>
         <ScrollView style={styles.view.scrollView}>
@@ -285,7 +314,35 @@ class TimeTableScreen extends Component {
                       size={30}
                       color='white' />
                   </TouchableOpacity>
-                  {this.renderCheck(user.stat)}
+                  <View
+                    style={{ flexDirection: 'row', alignSelf: 'center' }}>
+                    {this.renderCheck(user.stat)}
+                    <TouchableOpacity
+                      style={styles.button.subComment}
+                      onPress={() =>
+                        this.props.navigation.navigate('StudentComment', {
+                          key: user.key,
+                          uid: user.uid,
+                          date: user.date,
+                          timeCome: user.timeCome,
+                          timeBack: user.timeBack,
+                          comment: user.comment
+                        })
+                      }>
+                      <Icon2
+                        name='wechat'
+                        size={icoSize}
+                        style={styles.icon.color} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.button.subDelete}
+                      onPress={() => this.onDelete(user.uid, user.key)}>
+                      <Icon
+                        name='trash-alt'
+                        size={icoSize}
+                        style={styles.icon._color} />
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </Card >
             )

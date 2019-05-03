@@ -5,12 +5,14 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
+  Alert
 } from 'react-native'
 import styles from '../../styles'
 import {
   Card
 } from 'react-native-elements'
 import { NavigationEvents } from 'react-navigation'
+import Icon from 'react-native-vector-icons/FontAwesome5'
 
 class VisitScreen extends Component {
   constructor(props) {
@@ -53,9 +55,36 @@ class VisitScreen extends Component {
       })
   }
 
+  onDelete(key) {
+    const { list } = this.state
+    Alert.alert(
+      'แจ้งเตือน',
+      'แน่ใจที่จะลบนักศึกษา ?',
+      [
+        {
+          text: 'ยกเลิก',
+          style: 'cancel',
+        },
+        {
+          text: 'ลบ', onPress: () => {
+            firebase.database().ref(`visit/${key}`)
+              .remove().then(() => {
+                if (list.length == 1) {
+                  this.props.navigation.goBack()
+                } else {
+                  this.componentDidMount()
+                }
+              })
+          }
+        },
+      ],
+      { cancelable: false },
+    )
+  }
+
   render() {
     const { list } = this.state
-    // console.log(list)
+    var icoSize = 30
     return (
       <ScrollView style={styles.view.scrollView}>
         <NavigationEvents onDidFocus={() => this.componentDidMount()} />
@@ -85,6 +114,14 @@ class VisitScreen extends Component {
                         suid: user.suid,
                       })}>
                     <Text style={styles.button.subLabel}>ดูบันทึกกิจกรรม</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.button.subDelete}
+                    onPress={() => this.onDelete(user.key)}>
+                    <Icon
+                      name='trash-alt'
+                      size={icoSize}
+                      style={styles.icon._color} />
                   </TouchableOpacity>
                 </View>
               </Card>

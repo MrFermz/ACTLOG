@@ -135,11 +135,10 @@ class SaveScore extends Component {
         'แจ้งเตือน',
         'บันทึกข้อมูลสำเร็จ.',
         [
-          { text: 'ตกลง' },
+          { text: 'ตกลง', onPress: () => this.props.navigation.goBack() },
         ],
         { cancelable: false },
       )
-      this.props.navigation.goBack()
     })
   }
 

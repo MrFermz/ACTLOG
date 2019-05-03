@@ -44,7 +44,7 @@ class LoginScreen extends Component {
           // if (user.user.emailVerified) {
           this.getUserType()
           // }
-          this.setState({ loading: false })
+          // this.setState({ loading: false })
         })
         .catch((msgError) => {
           this.setState({ loading: false })
@@ -86,8 +86,9 @@ class LoginScreen extends Component {
                 } else {
                   Alert.alert('invalid years.')
                 }
+              } else {
+                this.setState({ loading: false })
               }
-              this.setState({ loading: false })
             })
         }
       })
@@ -147,7 +148,7 @@ class LoginScreen extends Component {
           resizeMode='center'
           style={{ width: 220, height: 220 }}
           source={require('../assets/logo.png')} />
-        <Text>1.4.0</Text>
+        <Text>1.4.0-BETA2</Text>
         <Input
           containerStyle={styles.input.container}
           inputContainerStyle={styles.input.inputContainer}

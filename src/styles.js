@@ -77,6 +77,24 @@ const button = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center'
   },
+  subDelete: {
+    width: 60, height: 60,
+    backgroundColor: '#E74C3C',
+    marginTop: 15,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center'
+  },
+  subAdd: {
+    width: 60, height: 60,
+    backgroundColor: '#2ECC71',
+    marginTop: 15,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center'
+  },
   actEdit: {
     width: 226, height: 50,
     backgroundColor: 'orange',
@@ -111,6 +129,16 @@ const button = StyleSheet.create({
   //ปกติ[0 #82E0AA] ขาด[1 #F1948A] สาย[2 #F8C471] ป่วย[3 #BB8FCE] ลา[4 #85C1E9] 
   subStatWait: {
     width: 120, height: 60,
+    borderRadius: 30,
+    backgroundColor: '#EAECEE',
+    marginTop: 15,
+    marginRight: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center'
+  },
+  subComment: {
+    width: 60, height: 60,
     borderRadius: 30,
     backgroundColor: '#EAECEE',
     marginTop: 15,
@@ -242,6 +270,9 @@ const input = StyleSheet.create({
 const icon = StyleSheet.create({
   color: {
     color: '#34495E'
+  },
+  _color: {
+    color: 'white'
   },
   homeMenuContainer: {
     width: 150, height: 150,

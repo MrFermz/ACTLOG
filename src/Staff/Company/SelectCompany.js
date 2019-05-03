@@ -8,7 +8,7 @@ import {
   ScrollView
 } from 'react-native'
 import styles from '../../styles'
-import { Card, Input, Rating } from 'react-native-elements'
+import { Card, Input } from 'react-native-elements'
 import { NavigationEvents } from 'react-navigation'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 
@@ -32,7 +32,7 @@ class SelectCompany extends Component {
           var key = child.key
           var val = child.val()
           items.push({
-            key: child.key,
+            key,
             name: val.name,
             address: val.address,
             address1: val.address1,
@@ -96,7 +96,7 @@ class SelectCompany extends Component {
               size={icoSize}
               style={styles.icon.color} />
           }
-          placeholder='ค้นหา'
+          placeholder='ค้นหา ชื่อ'
           autoCapitalize='none'
           autoCorrect={false}
           onChangeText={(text) => this.searchCompany(text)} />

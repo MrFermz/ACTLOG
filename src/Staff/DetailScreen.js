@@ -40,19 +40,35 @@ class DetailScreen extends Component {
       .once('value').then(snapshot => {
         data = snapshot.val()
         var key = data.company
-        firebase.database().ref(`company/${key}`)
-          .once('value').then((snapshot) => {
-            var val = snapshot.val()
-            this.setState({
-              fname: data.fname,
-              lname: data.lname,
-              email: data.email,
-              telNum: data.telNum,
-              uuid: uid,
-              avatar: data.avatar,
-              company: val.name
+        if (key) {
+          firebase.database().ref(`company/${key}`)
+            .once('value').then((snapshot) => {
+              var val = snapshot.val()
+              this.setState({
+                fname: data.fname,
+                lname: data.lname,
+                email: data.email,
+                telNum: data.telNum,
+                uuid: uid,
+                avatar: data.avatar,
+                company: val.name
+              })
             })
-          })
+        } else {
+          firebase.database().ref(`company/${key}`)
+            .once('value').then((snapshot) => {
+              var val = snapshot.val()
+              this.setState({
+                fname: data.fname,
+                lname: data.lname,
+                email: data.email,
+                telNum: data.telNum,
+                uuid: uid,
+                avatar: data.avatar,
+                company: '-'
+              })
+            })
+        }
       })
   }
 

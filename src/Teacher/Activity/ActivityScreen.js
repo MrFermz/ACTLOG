@@ -12,6 +12,7 @@ import {
   Card,
 } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import Icon2 from 'react-native-vector-icons/FontAwesome'
 
 class ActivityScreen extends Component {
   constructor(props) {
@@ -118,6 +119,7 @@ class ActivityScreen extends Component {
 
   render() {
     const { list } = this.state
+    var icoSize = 30
     return (
       <ScrollView style={styles.view.scrollView}>
         <View style={styles.view.container}>
@@ -156,7 +158,23 @@ class ActivityScreen extends Component {
                       <Text style={styles.button.subLabel}>บ่าย</Text>
                     </TouchableOpacity>
                   </View>
-                  {this.renderCheck(user.stat)}
+                  <View
+                    style={{ flexDirection: 'row', alignSelf: 'center' }}>
+                    {this.renderCheck(user.stat)}
+                    <TouchableOpacity
+                      style={styles.button.subComment}
+                      onPress={() =>
+                        this.props.navigation.navigate('StudentComment', {
+                          key: user.key,
+                          uid: user.suid
+                        })
+                      }>
+                      <Icon2
+                        name='wechat'
+                        size={icoSize}
+                        style={styles.icon.color} />
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </Card>
             )
