@@ -6,16 +6,9 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
-  View,
-  Image
+  View
 } from 'react-native'
 import styles from '../../styles'
-import {
-  Card,
-  AirbnbRating,
-  Rating
-} from 'react-native-elements'
-import ImagePicker from 'react-native-image-crop-picker'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 
 class AddComment extends Component {

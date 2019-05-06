@@ -7,13 +7,12 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
-  Image,
-  Modal,
   ActivityIndicator
 } from 'react-native'
 import styles from '../../styles'
 import ImagePicker from 'react-native-image-crop-picker'
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import Modal from 'react-native-modal'
 
 class AddActivity extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -45,7 +44,10 @@ class AddActivity extends Component {
     super(props)
     this.state = {
       morning: '',
-      afternoon: ''
+      afternoon: '',
+      open: false,
+      total: 0,
+      count: 0
     }
   }
 
@@ -92,6 +94,16 @@ class AddActivity extends Component {
     })
   }
 
+  generator() {
+    var length = 20
+    charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
+      value = ''
+    for (var i = 0, n = charset.length; i < length; ++i) {
+      value += charset.charAt(Math.floor(Math.random() * n))
+    }
+    return value
+  }
+
   _pickImage() {
     ImagePicker.openPicker({
       width: 1280,
@@ -100,29 +112,32 @@ class AddActivity extends Component {
       mediaType: 'photo'
     }).then((img) => {
       console.log(img)
+      var name = '', total = img.length
+      this.setState({ total })
+
       img.forEach((e) => {
         console.log(e.path)
-        this.uploadImage(e.path, new Date().getTime())
+        name = this.generator()
+        this.uploadImage(e.path, name)
       })
-      Alert.alert('Uploaded')
     })
   }
 
-  uploadImage(uri, time, mime = 'application/octet-stream') {
+  uploadImage(uri, name, mime = 'application/octet-stream') {
     return new Promise((resolve, reject) => {
       var { navigation } = this.props
       var key = navigation.getParam('key')
+      let mime = 'image/jpg'
       const imagePath = uri
       const uid = firebase.auth().currentUser.uid
       const imageRef = firebase
         .storage()
-        .ref(`users/${uid}/${key}`)
-        .child(time)
-      let mime = 'image/jpg'
+        .ref(`activity/${uid}/${key}`)
+        .child(name)
 
-      imageRef
-        .put(imagePath, { contentType: mime })
+      imageRef.put(imagePath, { contentType: mime })
         .then(async () => {
+          this.setState({ open: true })
           return imageRef.getDownloadURL()
             .then((url) => {
               console.log(url)
@@ -139,13 +154,67 @@ class AddActivity extends Component {
     firebase.database().ref(`timeTable/${uid}/${key}/photos`).push({
       photo: url
     }).then(() => {
+      this.setState({ count: this.state.count + 1 })
     })
+  }
+
+  handleModal() {
+    this.setState({ open: !this.state.open })
+  }
+
+  renderModal() {
+    const { open, total, count } = this.state
+    return (
+      <Modal
+        isVisible={open}
+        animationIn='fadeIn'
+        animationOut='fadeOut'
+        onModalHide={() => {
+          this.setState({ progress: '', count: 0, total: 0 })
+        }}
+        onBackButtonPress={() => {
+          if (count == total) {
+            this.handleModal()
+          }
+        }}
+        onBackdropPress={() => {
+          if (count == total) {
+            this.handleModal()
+          }
+        }}>
+        <View
+          style={{
+            justifyContent: 'center',
+            backgroundColor: 'white',
+            width: '100%', height: '30%',
+            borderRadius: 20
+          }}>
+          <Text
+            style={{ fontSize: 25, alignSelf: 'center' }}>
+            {`${count} / ${total}`}</Text>
+          {count == total
+            ? <TouchableOpacity
+              onPress={() => this.handleModal()}
+              style={styles.button.subAdd}>
+              <Icon
+                size={30}
+                name='check' />
+            </TouchableOpacity>
+            : <ActivityIndicator
+              size='large' />}
+        </View>
+      </Modal>
+    )
   }
 
   render() {
     const { morning, afternoon } = this.state
     return (
       <ScrollView style={styles.view.scrollView}>
+        {this.renderModal()}
+        {/* <TouchableOpacity onPress={() => this.handleModal()}>
+          <Text>Open Modal</Text>
+        </TouchableOpacity> */}
         <TextInput
           style={styles.input.actField}
           placeholderTextColor='black'

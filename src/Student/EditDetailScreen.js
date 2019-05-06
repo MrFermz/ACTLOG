@@ -7,10 +7,6 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
-  Image,
-  Platform,
-  Picker,
-  Modal,
   ActivityIndicator
 } from 'react-native'
 import styles from '../styles'
@@ -18,6 +14,7 @@ import ImagePicker from 'react-native-image-picker'
 import DatePicker from 'react-native-datepicker'
 import { Avatar } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import Modal from 'react-native-modal'
 
 const options = {
   title: 'เลือกรูปภาพ',
@@ -62,7 +59,9 @@ class EditDetailScreen extends Component {
       avatar: '',
       modalVisible: false,
       dateStartPicker: '',
-      dateEndPicker: ''
+      dateEndPicker: '',
+      progress: 0,
+      open: false
     }
   }
 
@@ -162,6 +161,7 @@ class EditDetailScreen extends Component {
   }
 
   uploadImage(uri, mime = 'application/octet-stream') {
+    this.setState({ open: true })
     return new Promise((resolve, reject) => {
       const imagePath = uri
       const uid = firebase.auth().currentUser.uid
@@ -171,19 +171,19 @@ class EditDetailScreen extends Component {
         .child('avatar.jpg')
       let mime = 'image/jpg'
 
-      imageRef
-        .put(imagePath, { contentType: mime })
-        .then(async () => {
-          return imageRef.getDownloadURL()
+      imageRef.putFile(imagePath, { contentType: mime })
+        .on('state_changed', (snapshot) => {
+          var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          this.setState({ progress })
+          console.log(progress)
+          imageRef.getDownloadURL()
             .then((url) => {
-              this.setModalVisible(true)
-              // console.log(url)
-              this.setState({ avatar: url })
+              console.log(url)
               this.saveUrl(url)
             })
+            .then(resolve)
+            .catch(reject)
         })
-        .then(resolve)
-        .catch(reject)
     })
   }
 
@@ -192,28 +192,61 @@ class EditDetailScreen extends Component {
     firebase.database().ref(`users/${uid}`).update({
       avatar: url
     }).then(() => {
-      this.setModalVisible(!this.state.modalVisible)
+      this.setState({ avatar: url })
     })
   }
 
-  setModalVisible(visible) {
-    this.setState({ modalVisible: visible })
+  handleModal() {
+    this.setState({ open: !this.state.open })
+  }
+
+  renderModal() {
+    const { progress, open } = this.state
+    return (
+      <Modal
+        isVisible={open}
+        animationIn='fadeIn'
+        animationOut='fadeOut'
+        onModalHide={() => {
+          this.setState({ progress: 0 })
+        }}
+        onBackButtonPress={() => {
+          if (progress == 100) {
+            this.handleModal()
+          }
+        }}
+        onBackdropPress={() => {
+          if (progress == 100) {
+            this.handleModal()
+          }
+        }}>
+        <View
+          style={{
+            justifyContent: 'center',
+            backgroundColor: 'white',
+            width: '100%', height: '30%',
+            borderRadius: 20
+          }}>
+          {progress == 100
+            ? <TouchableOpacity
+              onPress={() => this.handleModal()}
+              style={styles.button.subAdd}>
+              <Icon
+                size={30}
+                name='check' />
+            </TouchableOpacity>
+            : <ActivityIndicator
+              size='large' />}
+        </View>
+      </Modal>
+    )
   }
 
   render() {
     const { sid, fname, lname, group, subject, telNum, email, sidStat, dateStartPicker, dateEndPicker } = this.state
     return (
       <ScrollView style={styles.view.scrollView}>
-        <Modal
-          animationType='slide'
-          transparent={true}
-          visible={this.state.modalVisible}>
-          <View style={{ flex: 1, justifyContent: 'center' }}>
-            <ActivityIndicator
-              size='large'
-              color='red' />
-          </View>
-        </Modal>
+        {this.renderModal()}
         <Avatar
           source={{ uri: this.state.avatar }}
           size='xlarge'
@@ -221,6 +254,9 @@ class EditDetailScreen extends Component {
           showEditButton
           rounded
           containerStyle={{ alignSelf: 'center', margin: 20 }} />
+        <TouchableOpacity onPress={() => this.handleModal()}>
+          <Text>Open Modal</Text>
+        </TouchableOpacity>
         {this.sidLoader(sidStat, sid)}
         <TextInput
           style={styles.input.borderWithFont}

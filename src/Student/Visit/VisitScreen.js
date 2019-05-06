@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import firebase from 'react-native-firebase'
 import {
   View,
   Text,
@@ -7,13 +8,13 @@ import {
   TouchableOpacity,
   Modal
 } from 'react-native'
+import styles from '../../styles'
 import {
   Card,
   Rating,
   AirbnbRating
 } from 'react-native-elements'
-import firebase from 'react-native-firebase'
-import styles from '../../styles'
+import Icon from 'react-native-vector-icons/FontAwesome5'
 
 class VisitScreen extends Component {
   constructor(props) {
@@ -143,8 +144,11 @@ class VisitScreen extends Component {
                     onPress={() => this.props.navigation.navigate('StudentViewVisit', {
                       key: user.key
                     })}
-                    style={styles.button.sub}>
-                    <Text style={styles.button.subLabel}>ดูรูปเพิ่มเติม</Text>
+                    style={styles.button.subAdd}>
+                    <Icon
+                      size={30}
+                      name='images'
+                      color='white' />
                   </TouchableOpacity>
                 </View>
               </Card>

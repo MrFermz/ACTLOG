@@ -7,7 +7,8 @@ import {
   TextInput,
   Alert,
   View,
-  Image
+  Image,
+  ActivityIndicator
 } from 'react-native'
 import styles from '../../styles'
 import {
@@ -16,6 +17,7 @@ import {
 } from 'react-native-elements'
 import ImagePicker from 'react-native-image-crop-picker'
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import Modal from 'react-native-modal'
 
 class SaveScore extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -60,7 +62,11 @@ class SaveScore extends Component {
       score7: '',
       score8: '',
       score9: '',
-      score10: ''
+      score10: '',
+      progress: '',
+      open: false,
+      total: 0,
+      count: 0
     }
   }
 
@@ -142,6 +148,16 @@ class SaveScore extends Component {
     })
   }
 
+  generator() {
+    var length = 20
+    charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
+      value = ''
+    for (var i = 0, n = charset.length; i < length; ++i) {
+      value += charset.charAt(Math.floor(Math.random() * n))
+    }
+    return value
+  }
+
   _pickImage() {
     ImagePicker.openPicker({
       width: 1280,
@@ -150,30 +166,34 @@ class SaveScore extends Component {
       mediaType: 'photo'
     }).then((img) => {
       console.log(img)
+      var name = '', total = img.length
+      this.setState({ total })
+
       img.forEach((e) => {
         console.log(e.path)
-        this.uploadImage(e.path, new Date().getTime())
+        name = this.generator()
+        this.uploadImage(e.path, name)
       })
     })
   }
 
-  uploadImage(uri, time, mime = 'application/octet-stream') {
+  uploadImage(uri, name, mime = 'application/octet-stream') {
     return new Promise((resolve, reject) => {
       var { navigation } = this.props
       var key = navigation.getParam('key')
+      let mime = 'image/jpg'
       const imagePath = uri
       const imageRef = firebase
-        .storage()
-        .ref(`comment/${key}`)
-        .child(time)
-      let mime = 'image/jpg'
-
-      imageRef
-        .put(imagePath, { contentType: mime })
-        .then(async () => {
-          return imageRef.getDownloadURL()
-            .then((url) => {
-              console.log(url)
+      .storage()
+      .ref(`comment/${key}`)
+      .child(name)
+      
+      imageRef.put(imagePath, { contentType: mime })
+      .then(async () => {
+        this.setState({ open: true })
+        return imageRef.getDownloadURL()
+        .then((url) => {
+          console.log(url)
               this.saveUrl(url, key)
             })
         })
@@ -186,15 +206,68 @@ class SaveScore extends Component {
     firebase.database().ref(`comment/${key}/photos`).push({
       photo: url
     }).then(() => {
-      Alert.alert('อัพโหลดเสร็จแล้ว.')
+      this.setState({ count: this.state.count + 1 })
     })
+  }
+
+  handleModal() {
+    this.setState({ open: !this.state.open })
+  }
+
+  renderModal() {
+    const { open, total, count } = this.state
+    console.log(`${count} / ${total}`)
+    return (
+      <Modal
+        isVisible={open}
+        animationIn='fadeIn'
+        animationOut='fadeOut'
+        onModalHide={() => {
+          this.setState({ progress: '', count: 0, total: 0 })
+        }}
+        onBackButtonPress={() => {
+          if (count == total) {
+            this.handleModal()
+          }
+        }}
+        onBackdropPress={() => {
+          if (count == total) {
+            this.handleModal()
+          }
+        }}>
+        <View
+          style={{
+            justifyContent: 'center',
+            backgroundColor: 'white',
+            width: '100%', height: '30%',
+            borderRadius: 20
+          }}>
+          <Text
+            style={{ fontSize: 25, alignSelf: 'center' }}>
+            {`${count} / ${total}`}</Text>
+          {count == total
+            ? <TouchableOpacity
+              onPress={() => this.handleModal()}
+              style={styles.button.subAdd}>
+              <Icon
+                size={30}
+                name='check' />
+            </TouchableOpacity>
+            : <ActivityIndicator
+              size='large' />}
+        </View>
+      </Modal>
+    )
   }
 
   render() {
     const { comment, list, score1, score2, score3, score4, score5, score6, score7, score8, score9, score10 } = this.state
     return (
       <ScrollView style={styles.view.scrollView}>
-
+        {this.renderModal()}
+        {/* <TouchableOpacity onPress={() => this.handleModal()}>
+          <Text>Open Modal</Text>
+        </TouchableOpacity> */}
         <View style={{ marginTop: 40 }}>
           <Text style={{
             alignSelf: 'center',
