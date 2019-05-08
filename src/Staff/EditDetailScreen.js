@@ -56,7 +56,9 @@ class EditDetailScreen extends Component {
       telNum: '',
       avatar: '',
       progress: 0,
-      open: false
+      open: false,
+      position: '',
+      major: ''
     }
   }
 
@@ -71,23 +73,29 @@ class EditDetailScreen extends Component {
     var email = this.props.navigation.getParam('email')
     var telNum = this.props.navigation.getParam('telNum')
     var avatar = this.props.navigation.getParam('avatar')
+    var position = this.props.navigation.getParam('position')
+    var major = this.props.navigation.getParam('major')
     this.setState({
-      fname: fname,
-      lname: lname,
-      email: email,
-      telNum: telNum,
-      avatar: avatar
+      fname,
+      lname,
+      email,
+      telNum,
+      avatar,
+      position,
+      major
     })
   }
 
   saveDetail() {
-    const { fname, lname, telNum } = this.state
+    const { fname, lname, telNum, position, major } = this.state
     var uid = firebase.auth().currentUser.uid
     firebase.database().ref(`users/${uid}`).update({
-      fname: fname,
-      lname: lname,
-      telNum: telNum,
-      setup: false
+      fname,
+      lname,
+      telNum,
+      setup: false,
+      position,
+      major
     }).then(() => {
       Alert.alert(
         'แจ้งเตือน',
@@ -190,7 +198,7 @@ class EditDetailScreen extends Component {
   }
 
   render() {
-    const { fname, lname, telNum, email, progress } = this.state
+    const { fname, lname, telNum, email, position, major } = this.state
     return (
       <ScrollView style={styles.view.scrollView}>
         {this.renderModal()}
@@ -227,6 +235,20 @@ class EditDetailScreen extends Component {
           placeholder='เบอร์โทร'
           onChangeText={(text) => this.setState({ telNum: text })}
           keyboardType='phone-pad'
+          autoCorrect={false} />
+        <TextInput
+          style={styles.input.borderWithFont}
+          placeholderTextColor='gray'
+          defaultValue={position}
+          placeholder='ตำแหน่ง'
+          onChangeText={(text) => this.setState({ position: text })}
+          autoCorrect={false} />
+        <TextInput
+          style={styles.input.borderWithFont}
+          placeholderTextColor='gray'
+          defaultValue={major}
+          placeholder='ฝ่าย/แผนกงาน'
+          onChangeText={(text) => this.setState({ major: text })}
           autoCorrect={false} />
         <TextInput
           editable={false}

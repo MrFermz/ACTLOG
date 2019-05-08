@@ -25,7 +25,9 @@ class DetailScreen extends Component {
       telNum: '',
       uuid: '',
       avatar: '',
-      company: ''
+      company: '',
+      position: '',
+      major: ''
     }
   }
 
@@ -51,7 +53,9 @@ class DetailScreen extends Component {
                 telNum: data.telNum,
                 uuid: uid,
                 avatar: data.avatar,
-                company: val.name
+                company: val.name,
+                position: data.position,
+                major: data.major
               })
             })
         } else {
@@ -65,7 +69,9 @@ class DetailScreen extends Component {
                 telNum: data.telNum,
                 uuid: uid,
                 avatar: data.avatar,
-                company: '-'
+                company: '-',
+                position: data.position,
+                major: data.major
               })
             })
         }
@@ -73,18 +79,20 @@ class DetailScreen extends Component {
   }
 
   editDetail() {
-    const { fname, lname, email, telNum, avatar } = this.state
+    const { fname, lname, email, telNum, avatar, position, major } = this.state
     this.props.navigation.navigate('StaffEditDetail', {
-      fname: fname,
-      lname: lname,
-      email: email,
-      telNum: telNum,
-      avatar: avatar
+      fname,
+      lname,
+      email,
+      telNum,
+      avatar,
+      position,
+      major
     })
   }
 
   render() {
-    const { fname, lname, email, telNum, uuid, avatar, company } = this.state
+    const { fname, lname, email, telNum, uuid, avatar, company, position, major } = this.state
     return (
       <View style={{ flex: 1 }}>
         <NavigationEvents onDidFocus={() => this.componentDidMount()} />
@@ -121,6 +129,22 @@ class DetailScreen extends Component {
                     name='building'
                     size={22} />
                   <Text style={styles.label.detail}>{company}</Text>
+                </View>
+
+                <View style={styles.view.containerWithBorder}>
+                  <Icon
+                    style={styles.icon.detail}
+                    name='user-circle'
+                    size={22} />
+                  <Text style={styles.label.detail}>{position}</Text>
+                </View>
+
+                <View style={styles.view.containerWithBorder}>
+                  <Icon
+                    style={styles.icon.detail}
+                    name='line-chart'
+                    size={22} />
+                  <Text style={styles.label.detail}>{major}</Text>
                 </View>
 
               </View>
