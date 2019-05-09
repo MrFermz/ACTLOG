@@ -23,7 +23,7 @@
   - Android SDK Platform
   - Performance (Intel ® HAXM)
   - Android Virtual Device
-* ติดตั้ง Emulator Android 8.1 (oreo)
+* ติดตั้ง Emulator Android 9.0 (Pie)
   - Android SDK Platform 28
   - Intel x86 Atom_64 System Image
   - รัน Emulator ไว้เลย
@@ -32,6 +32,7 @@
   - ที่อยู่เดิม ```c:\Users\YOUR_USERNAME\AppData\Local\Android\Sdk```
 * โหลดไฟล์โปรเจคแล้วแตกไฟล์ไว้ซักที่
 * เปิดหน้า CMD ในโปรเจค
+  - ```npm i``` รอจนเสร็จ
   - ```npm start```
   - เปิด CMD อีกอันแล้วพิมพ์ ```react-native run-android```
 * เสร็จ
