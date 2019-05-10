@@ -4,11 +4,7 @@ import {
   View,
   Text,
   ScrollView,
-  TouchableOpacity,
-  Button,
-  Alert,
-  Picker,
-  Modal
+  TouchableOpacity
 } from 'react-native'
 import styles from '../styles'
 import Icon from 'react-native-vector-icons/FontAwesome5'
@@ -18,7 +14,7 @@ import {
 } from 'react-native-elements'
 import { NavigationEvents } from 'react-navigation'
 
-class DetailScreen extends Component {
+export default class DetailScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -44,7 +40,6 @@ class DetailScreen extends Component {
 
   getDetail() {
     var uid = firebase.auth().currentUser.uid
-
     firebase.database().ref(`users/${uid}`)
       .once('value').then(snapshot => {
         var data = snapshot.val()
@@ -131,6 +126,7 @@ class DetailScreen extends Component {
           <View style={styles.view.detailContainer}>
             <Card containerStyle={styles.view.card}>
               <View style={styles.view.headerContainer}>
+
                 <Avatar
                   source={{ uri: avatar }}
                   size='xlarge'
@@ -211,5 +207,3 @@ class DetailScreen extends Component {
     )
   }
 }
-
-export default DetailScreen

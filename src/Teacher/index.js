@@ -3,7 +3,6 @@ import firebase from 'react-native-firebase'
 import {
   createAppContainer,
   createBottomTabNavigator,
-  createDrawerNavigator,
   StackActions,
   NavigationActions
 } from 'react-navigation'
@@ -24,9 +23,7 @@ class Logout extends Component {
     })
   }
   render() {
-    return [
-      this.Logout()
-    ]
+    return [this.Logout()]
   }
 }
 
@@ -68,8 +65,6 @@ const TabStack = createBottomTabNavigator({
       )
     }
   }
-}, {
-    initialRouteName: 'TeachHome'
-  })
+}, { initialRouteName: 'TeachHome' })
 
 export default createAppContainer(TabStack)

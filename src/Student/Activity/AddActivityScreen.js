@@ -14,7 +14,7 @@ import ImagePicker from 'react-native-image-crop-picker'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import Modal from 'react-native-modal'
 
-class AddActivity extends Component {
+export default class AddActivity extends Component {
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state
     return {
@@ -27,11 +27,11 @@ class AddActivity extends Component {
             [
               {
                 text: 'ยกเลิก',
-                style: 'cancel',
+                style: 'cancel'
               },
-              { text: 'ตกลง', onPress: () => params.save() },
+              { text: 'ตกลง', onPress: () => params.save() }
             ],
-            { cancelable: false },
+            { cancelable: false }
           )}
           style={styles.button.headerRight}>
           {<Icon name='save' size={30} color='white' />}
@@ -61,20 +61,16 @@ class AddActivity extends Component {
     var { navigation } = this.props
     var uid, timeTable
     var key = navigation.getParam('key')
-    console.log(key)
     uid = firebase.auth().currentUser.uid
     timeTable = firebase.database().ref(`timeTable/${uid}/${key}`)
-    console.log(key)
     timeTable.update({
-      morning: morning,
-      afternoon: afternoon,
+      morning,
+      afternoon
     }).then(() => {
       Alert.alert(
         'แจ้งเตือน',
         'แก้ไขกิจกรรมแล้ว.',
-        [
-          { text: 'ตกลง' },
-        ],
+        [{ text: 'ตกลง' }],
         { cancelable: false },
       )
       this.props.navigation.goBack()
@@ -86,11 +82,10 @@ class AddActivity extends Component {
     var date = navigation.getParam('date')
     var morning = navigation.getParam('morning')
     var afternoon = navigation.getParam('afternoon')
-
     this.setState({
-      date: date,
-      morning: morning,
-      afternoon: afternoon,
+      date,
+      morning,
+      afternoon
     })
   }
 
@@ -111,12 +106,9 @@ class AddActivity extends Component {
       multiple: true,
       mediaType: 'photo'
     }).then((img) => {
-      console.log(img)
       var name = '', total = img.length
       this.setState({ total })
-
       img.forEach((e) => {
-        console.log(e.path)
         name = this.generator()
         this.uploadImage(e.path, name)
       })
@@ -134,13 +126,11 @@ class AddActivity extends Component {
         .storage()
         .ref(`activity/${uid}/${key}`)
         .child(name)
-
       imageRef.put(imagePath, { contentType: mime })
         .then(async () => {
           this.setState({ open: true })
           return imageRef.getDownloadURL()
             .then((url) => {
-              console.log(url)
               this.saveUrl(url, key)
             })
         })
@@ -240,5 +230,3 @@ class AddActivity extends Component {
     )
   }
 }
-
-export default AddActivity

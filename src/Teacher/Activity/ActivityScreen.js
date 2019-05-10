@@ -1,20 +1,18 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import firebase from 'react-native-firebase'
 import {
   View,
   Text,
   ScrollView,
-  TouchableOpacity,
-  Alert,
+  TouchableOpacity
 } from 'react-native'
 import styles from '../../styles'
 import {
   Card,
 } from 'react-native-elements'
-import Icon from 'react-native-vector-icons/FontAwesome5'
 import Icon2 from 'react-native-vector-icons/FontAwesome'
 
-class ActivityScreen extends Component {
+export default class ActivityScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -31,24 +29,20 @@ class ActivityScreen extends Component {
     var items = []
     firebase.database().ref(`timeTable/${suid}`)
       .once('value').then((snapshot) => {
-        // console.log(snapshot.val())
         snapshot.forEach((child) => {
           val = child.val()
           key = child.key
-          // console.log(key)
           items.push({
             date: val.date,
             timeCome: val.timeCome,
             timeBack: val.timeBack,
             morning: val.morning,
             afternoon: val.afternoon,
-            key: key,
-            suid: suid,
+            key,
+            suid,
             stat: val.stat
           })
-          this.setState({
-            list: items
-          })
+          this.setState({ list: items })
         })
       })
   }
@@ -56,63 +50,63 @@ class ActivityScreen extends Component {
   renderCheck(stat) {
     if (stat == 0) {
       return (
-        <React.Fragment>
+        <Fragment>
           <TouchableOpacity
             disabled
             style={styles.button.subStat}>
             <Text style={styles.button.subLabel}>ปกติ</Text>
           </TouchableOpacity>
-        </React.Fragment>
+        </Fragment>
       )
     } else if (stat == 1) {
       return (
-        <React.Fragment>
+        <Fragment>
           <TouchableOpacity
             disabled
             style={styles.button.subStat1}>
             <Text style={styles.button.subLabel}>ขาด</Text>
           </TouchableOpacity>
-        </React.Fragment>
+        </Fragment>
       )
     } else if (stat == 2) {
       return (
-        <React.Fragment>
+        <Fragment>
           <TouchableOpacity
             disabled
             style={styles.button.subStat2}>
             <Text style={styles.button.subLabel}>สาย</Text>
           </TouchableOpacity>
-        </React.Fragment>
+        </Fragment>
       )
     } else if (stat == 3) {
       return (
-        <React.Fragment>
+        <Fragment>
           <TouchableOpacity
             disabled
             style={styles.button.subStat3}>
             <Text style={styles.button.subLabel}>ป่วย</Text>
           </TouchableOpacity>
-        </React.Fragment>
+        </Fragment>
       )
     } else if (stat == 4) {
       return (
-        <React.Fragment>
+        <Fragment>
           <TouchableOpacity
             disabled
             style={styles.button.subStat4}>
             <Text style={styles.button.subLabel}>ลา</Text>
           </TouchableOpacity>
-        </React.Fragment>
+        </Fragment>
       )
     } else {
       return (
-        <React.Fragment>
+        <Fragment>
           <TouchableOpacity
             disabled
             style={styles.button.subStatWait}>
             <Text style={styles.button.subLabel}>รอตรวจ</Text>
           </TouchableOpacity>
-        </React.Fragment>
+        </Fragment>
       )
     }
   }
@@ -184,5 +178,3 @@ class ActivityScreen extends Component {
     )
   }
 }
-
-export default ActivityScreen

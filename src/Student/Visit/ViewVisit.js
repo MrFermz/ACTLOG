@@ -2,13 +2,11 @@ import React, { Component } from 'react'
 import firebase from 'react-native-firebase'
 import {
   ScrollView,
-  Image,
-  Text
+  Image
 } from 'react-native'
-import styles from '../../styles'
 import { Card } from 'react-native-elements'
 
-class ViewVisit extends Component {
+export default class ViewVisit extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -27,10 +25,7 @@ class ViewVisit extends Component {
     firebase.database().ref(`visit/${key}/photos`)
       .once('value').then((snapshot) => {
         snapshot.forEach((child) => {
-          // console.log(child.val().photo)
-          items.push({
-            photo: child.val().photo
-          })
+          items.push({ photo: child.val().photo })
         })
         this.setState({ list: items })
       })
@@ -53,5 +48,3 @@ class ViewVisit extends Component {
     )
   }
 }
-
-export default ViewVisit

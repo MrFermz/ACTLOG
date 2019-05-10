@@ -5,15 +5,14 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  Image,
-  Alert
+  Image
 } from 'react-native'
 import styles from '../../styles'
 import { Card } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { NavigationEvents } from 'react-navigation'
 
-class ActivityScreen extends Component {
+export default class ActivityScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state
     return {
@@ -43,10 +42,10 @@ class ActivityScreen extends Component {
     const { date, morning, afternoon, key } = this.state
     this.props.navigation.setParams({
       edit: () => this.props.navigation.navigate('StudentAddActivity', {
-        key: key,
-        date: date,
-        morning: morning,
-        afternoon: afternoon
+        key,
+        date,
+        morning,
+        afternoon
       })
     })
     this.getList()
@@ -56,21 +55,17 @@ class ActivityScreen extends Component {
     var uid, items = []
     var date = this.props.navigation.getParam('date')
     var key = this.props.navigation.getParam('key')
-    console.log(date)
-    console.log(key)
     uid = firebase.auth().currentUser.uid
-
     firebase.database().ref(`timeTable/${uid}/${key}`)
       .once('value').then(snapshot => {
         child = snapshot.val()
         this.setState({
-          key: key,
-          date: date,
+          key,
+          date,
           morning: child.morning,
           afternoon: child.afternoon
         })
       })
-
     firebase.database().ref(`timeTable/${uid}/${key}/photos`)
       .once('value').then((snapshot) => {
         snapshot.forEach((child) => {
@@ -84,7 +79,6 @@ class ActivityScreen extends Component {
 
   render() {
     const { date, morning, afternoon, list } = this.state
-    // console.log(list)
     return (
       <ScrollView style={styles.view.scrollView}>
         <NavigationEvents onDidFocus={() => this.componentDidMount()} />
@@ -112,5 +106,3 @@ class ActivityScreen extends Component {
     )
   }
 }
-
-export default ActivityScreen

@@ -4,8 +4,7 @@ import {
   View,
   Text,
   ScrollView,
-  TouchableOpacity,
-  Alert
+  TouchableOpacity
 } from 'react-native'
 import styles from '../styles'
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -15,7 +14,7 @@ import {
 } from 'react-native-elements'
 import { NavigationEvents } from 'react-navigation'
 
-class DetailScreen extends Component {
+export default class DetailScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -161,5 +160,3 @@ class DetailScreen extends Component {
     )
   }
 }
-
-export default DetailScreen;

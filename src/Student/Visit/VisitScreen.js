@@ -4,19 +4,16 @@ import {
   View,
   Text,
   ScrollView,
-  Alert,
   TouchableOpacity,
-  Modal
 } from 'react-native'
 import styles from '../../styles'
 import {
   Card,
-  Rating,
-  AirbnbRating
+  Rating
 } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 
-class VisitScreen extends Component {
+export default class VisitScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -31,7 +28,6 @@ class VisitScreen extends Component {
   getList() {
     var suid = firebase.auth().currentUser.uid
     var items = []
-
     firebase.database().ref('visit')
       .orderByChild('suid')
       .equalTo(suid)
@@ -159,5 +155,3 @@ class VisitScreen extends Component {
     )
   }
 }
-
-export default VisitScreen;

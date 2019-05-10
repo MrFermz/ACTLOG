@@ -4,8 +4,7 @@ import {
   View,
   Text,
   ScrollView,
-  TouchableOpacity,
-  Alert
+  TouchableOpacity
 } from 'react-native'
 import styles from '../styles'
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -15,7 +14,7 @@ import {
 } from 'react-native-elements'
 import { NavigationEvents } from 'react-navigation'
 
-class DetailScreen extends Component {
+export default class DetailScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -51,11 +50,11 @@ class DetailScreen extends Component {
   editDetail() {
     const { fname, lname, email, telNum, avatar } = this.state
     this.props.navigation.navigate('TeachEditDetail', {
-      fname: fname,
-      lname: lname,
-      email: email,
-      telNum: telNum,
-      avatar: avatar
+      fname,
+      lname,
+      email,
+      telNum,
+      avatar
     })
   }
 
@@ -68,6 +67,7 @@ class DetailScreen extends Component {
           <View style={styles.view.detailContainer}>
             <Card containerStyle={styles.view.card}>
               <View style={styles.view.headerContainer}>
+
                 <Avatar
                   source={{ uri: avatar }}
                   size='xlarge'
@@ -106,5 +106,3 @@ class DetailScreen extends Component {
     )
   }
 }
-
-export default DetailScreen

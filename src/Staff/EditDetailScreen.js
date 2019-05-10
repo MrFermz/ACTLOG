@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import firebase from 'react-native-firebase'
 import {
   View,
-  Text,
   ScrollView,
   TextInput,
   TouchableOpacity,
@@ -21,7 +20,7 @@ const options = {
   chooseFromLibraryButtonTitle: 'เลือกจากคลัง...'
 }
 
-class EditDetailScreen extends Component {
+export default class EditDetailScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     const { params } = navigation.state
     return {
@@ -34,9 +33,9 @@ class EditDetailScreen extends Component {
             [
               {
                 text: 'ยกเลิก',
-                style: 'cancel',
+                style: 'cancel'
               },
-              { text: 'ตกลง', onPress: () => params.save() },
+              { text: 'ตกลง', onPress: () => params.save() }
             ],
             { cancelable: false },
           )}
@@ -124,16 +123,13 @@ class EditDetailScreen extends Component {
         .ref(`avatar/${uid}`)
         .child('avatar.jpg')
       let mime = 'image/jpg'
-
       imageRef.putFile(imagePath, { contentType: mime })
         .on('state_changed', (snapshot) => {
           this.setState({ open: true })
           var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
           this.setState({ progress })
-          console.log(progress)
           imageRef.getDownloadURL()
             .then((url) => {
-              console.log(url)
               this.saveUrl(url)
             })
             .then(resolve)
@@ -258,5 +254,3 @@ class EditDetailScreen extends Component {
     )
   }
 }
-
-export default EditDetailScreen

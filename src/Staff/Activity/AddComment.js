@@ -1,17 +1,15 @@
 import React, { Component } from 'react'
 import firebase from 'react-native-firebase'
 import {
-  Text,
   ScrollView,
   TouchableOpacity,
   TextInput,
-  Alert,
-  View
+  Alert
 } from 'react-native'
 import styles from '../../styles'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 
-class AddComment extends Component {
+export default class AddComment extends Component {
   static navigationOptions = ({ navigation }) => {
     const { params } = navigation.state
     var date = navigation.getParam('date')
@@ -25,9 +23,9 @@ class AddComment extends Component {
             [
               {
                 text: 'ยกเลิก',
-                style: 'cancel',
+                style: 'cancel'
               },
-              { text: 'ตกลง', onPress: () => params.save() },
+              { text: 'ตกลง', onPress: () => params.save() }
             ],
             { cancelable: false },
           )}
@@ -70,10 +68,8 @@ class AddComment extends Component {
       Alert.alert(
         'แจ้งเตือน',
         'บันทึกความคิดเห็นแล้ว',
-        [
-          { text: 'ตกลง', onPress: () => this.props.navigation.goBack() },
-        ],
-        { cancelable: false },
+        [{ text: 'ตกลง', onPress: () => this.props.navigation.goBack() }],
+        { cancelable: false }
       )
     })
   }
@@ -96,5 +92,3 @@ class AddComment extends Component {
     )
   }
 }
-
-export default AddComment

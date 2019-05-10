@@ -14,7 +14,7 @@ import {
 import { NavigationEvents } from 'react-navigation'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 
-class VisitScreen extends Component {
+export default class VisitScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -29,7 +29,6 @@ class VisitScreen extends Component {
   getList() {
     var uid = firebase.auth().currentUser.uid
     var items = []
-
     firebase.database().ref('visit')
       .orderByChild('tuid')
       .equalTo(uid)
@@ -45,8 +44,8 @@ class VisitScreen extends Component {
                 fname: val1.fname,
                 lname: val1.lname,
                 sid: val1.sid,
-                key: key,
-                suid: suid,
+                key,
+                suid,
                 tuid: uid
               })
               this.setState({ list: items })
@@ -63,7 +62,7 @@ class VisitScreen extends Component {
       [
         {
           text: 'ยกเลิก',
-          style: 'cancel',
+          style: 'cancel'
         },
         {
           text: 'ลบ', onPress: () => {
@@ -78,7 +77,7 @@ class VisitScreen extends Component {
           }
         },
       ],
-      { cancelable: false },
+      { cancelable: false }
     )
   }
 
@@ -132,5 +131,3 @@ class VisitScreen extends Component {
     )
   }
 }
-
-export default VisitScreen

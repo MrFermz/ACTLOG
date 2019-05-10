@@ -19,7 +19,7 @@ import ImagePicker from 'react-native-image-crop-picker'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import Modal from 'react-native-modal'
 
-class SaveVisitScreen extends Component {
+export default class SaveVisitScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     const { params } = navigation.state
     var fname = navigation.getParam('fname')
@@ -36,9 +36,9 @@ class SaveVisitScreen extends Component {
                 text: 'ยกเลิก',
                 style: 'cancel',
               },
-              { text: 'ตกลง', onPress: () => params.save() },
+              { text: 'ตกลง', onPress: () => params.save() }
             ],
-            { cancelable: false },
+            { cancelable: false }
           )}
           style={styles.button.headerRight}>
           <Icon name='save' size={30} color='white' />
@@ -74,8 +74,6 @@ class SaveVisitScreen extends Component {
     var tuid = this.props.navigation.getParam('tuid')
     var key = this.props.navigation.getParam('key')
     var items = []
-    // console.log(`${suid} ${tuid} ${key}`)
-
     firebase.database().ref('visit')
       .orderByChild('tuid')
       .equalTo(tuid)
@@ -102,7 +100,6 @@ class SaveVisitScreen extends Component {
     firebase.database().ref(`visit/${key}/photos`)
       .once('value').then((snapshot) => {
         snapshot.forEach((child) => {
-          // console.log(child.val().photo)
           items.push({
             photo: child.val().photo
           })
@@ -124,10 +121,8 @@ class SaveVisitScreen extends Component {
       Alert.alert(
         'แจ้งเตือน',
         'บันทึกข้อมูลสำเร็จ.',
-        [
-          { text: 'ตกลง' },
-        ],
-        { cancelable: false },
+        [{ text: 'ตกลง' }],
+        { cancelable: false }
       )
       this.props.navigation.goBack()
     })
@@ -150,12 +145,9 @@ class SaveVisitScreen extends Component {
       multiple: true,
       mediaType: 'photo'
     }).then((img) => {
-      console.log(img)
       var name = '', total = img.length
       this.setState({ total })
-
       img.forEach((e) => {
-        console.log(e.path)
         name = this.generator()
         this.uploadImage(e.path, name)
       })
@@ -172,13 +164,11 @@ class SaveVisitScreen extends Component {
         .storage()
         .ref(`visit/${key}`)
         .child(name)
-
       imageRef.put(imagePath, { contentType: mime })
         .then(async () => {
           this.setState({ open: true })
           return imageRef.getDownloadURL()
             .then((url) => {
-              console.log(url)
               this.saveUrl(url, key)
             })
         })
@@ -264,7 +254,6 @@ class SaveVisitScreen extends Component {
             onFinishRating={(value) => { this.setState({ score1: value }) }}
             count={count}
             ratingCount={count}
-            // showRating={true}
             fractions={1}
             startingValue={score1}
             size={40} />
@@ -281,7 +270,6 @@ class SaveVisitScreen extends Component {
             onFinishRating={(value) => { this.setState({ score2: value }) }}
             count={count}
             ratingCount={count}
-            // showRating={true}
             fractions={1}
             startingValue={score2}
             size={40} />
@@ -298,7 +286,6 @@ class SaveVisitScreen extends Component {
             onFinishRating={(value) => { this.setState({ score3: value }) }}
             count={count}
             ratingCount={count}
-            // showRating={true}
             fractions={1}
             startingValue={score3}
             size={40} />
@@ -315,7 +302,6 @@ class SaveVisitScreen extends Component {
             onFinishRating={(value) => { this.setState({ score4: value }) }}
             count={count}
             ratingCount={count}
-            // showRating={true}
             fractions={1}
             startingValue={score4}
             size={40} />
@@ -332,7 +318,6 @@ class SaveVisitScreen extends Component {
             onFinishRating={(value) => { this.setState({ score5: value }) }}
             count={count}
             ratingCount={count}
-            // showRating={true}
             fractions={1}
             startingValue={score5}
             size={40} />
@@ -367,5 +352,3 @@ class SaveVisitScreen extends Component {
     )
   }
 }
-
-export default SaveVisitScreen

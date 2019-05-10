@@ -12,7 +12,7 @@ import { Card, Input } from 'react-native-elements'
 import { NavigationEvents } from 'react-navigation'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 
-class SelectCompany extends Component {
+export default class SelectCompany extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -46,7 +46,6 @@ class SelectCompany extends Component {
   }
 
   searchCompany(word) {
-    // console.log(word)
     var items = []
     firebase.database().ref('company')
       .orderByChild('name')
@@ -118,9 +117,9 @@ class SelectCompany extends Component {
                       [
                         {
                           text: 'ยกเลิก',
-                          style: 'cancel',
+                          style: 'cancel'
                         },
-                        { text: 'ตกลง', onPress: () => this.addCom(user.key) },
+                        { text: 'ตกลง', onPress: () => this.addCom(user.key) }
                       ],
                       { cancelable: false },
                     )}
@@ -131,10 +130,8 @@ class SelectCompany extends Component {
               </Card>
             )
           })}
-        </ScrollView >
+        </ScrollView>
       </View>
     )
   }
 }
-
-export default SelectCompany

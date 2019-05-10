@@ -11,7 +11,7 @@ import {
   Card,
 } from 'react-native-elements'
 
-class CommentScreen extends Component {
+export default class CommentScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -67,5 +67,3 @@ class CommentScreen extends Component {
     )
   }
 }
-
-export default CommentScreen

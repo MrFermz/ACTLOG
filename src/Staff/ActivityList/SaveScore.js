@@ -19,7 +19,7 @@ import ImagePicker from 'react-native-image-crop-picker'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import Modal from 'react-native-modal'
 
-class SaveScore extends Component {
+export default class SaveScore extends Component {
   static navigationOptions = ({ navigation }) => {
     const { params } = navigation.state
     var fname = navigation.getParam('fname')
@@ -34,9 +34,9 @@ class SaveScore extends Component {
             [
               {
                 text: 'ยกเลิก',
-                style: 'cancel',
+                style: 'cancel'
               },
-              { text: 'ตกลง', onPress: () => params.save() },
+              { text: 'ตกลง', onPress: () => params.save() }
             ],
             { cancelable: false },
           )}
@@ -80,8 +80,6 @@ class SaveScore extends Component {
     var suid = this.props.navigation.getParam('suid')
     var cuid = this.props.navigation.getParam('cuid')
     var key = this.props.navigation.getParam('key')
-    console.log(`${suid} ${cuid} ${key}`)
-
     firebase.database().ref('comment')
       .orderByChild('cuid')
       .equalTo(cuid)
@@ -111,7 +109,6 @@ class SaveScore extends Component {
           }
         })
       })
-
     firebase.database().ref(`comment/${key}/photos`)
       .once('value').then((snapshot) => {
         snapshot.forEach((child) => {
@@ -123,7 +120,6 @@ class SaveScore extends Component {
 
   saveComment() {
     const { comment, cid, score1, score2, score3, score4, score5, score6, score7, score8, score9, score10 } = this.state
-    console.log(cid)
     firebase.database().ref(`comment/${cid}`).update({
       comment,
       score1,
@@ -141,7 +137,7 @@ class SaveScore extends Component {
         'แจ้งเตือน',
         'บันทึกข้อมูลสำเร็จ.',
         [
-          { text: 'ตกลง', onPress: () => this.props.navigation.goBack() },
+          { text: 'ตกลง', onPress: () => this.props.navigation.goBack() }
         ],
         { cancelable: false },
       )
@@ -149,8 +145,8 @@ class SaveScore extends Component {
   }
 
   generator() {
-    var length = 20
-    charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
+    var length = 20,
+      charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
       value = ''
     for (var i = 0, n = charset.length; i < length; ++i) {
       value += charset.charAt(Math.floor(Math.random() * n))
@@ -165,12 +161,9 @@ class SaveScore extends Component {
       multiple: true,
       mediaType: 'photo'
     }).then((img) => {
-      console.log(img)
       var name = '', total = img.length
       this.setState({ total })
-
       img.forEach((e) => {
-        console.log(e.path)
         name = this.generator()
         this.uploadImage(e.path, name)
       })
@@ -184,16 +177,14 @@ class SaveScore extends Component {
       let mime = 'image/jpg'
       const imagePath = uri
       const imageRef = firebase
-      .storage()
-      .ref(`comment/${key}`)
-      .child(name)
-      
+        .storage()
+        .ref(`comment/${key}`)
+        .child(name)
       imageRef.put(imagePath, { contentType: mime })
-      .then(async () => {
-        this.setState({ open: true })
-        return imageRef.getDownloadURL()
-        .then((url) => {
-          console.log(url)
+        .then(async () => {
+          this.setState({ open: true })
+          return imageRef.getDownloadURL()
+            .then((url) => {
               this.saveUrl(url, key)
             })
         })
@@ -216,7 +207,6 @@ class SaveScore extends Component {
 
   renderModal() {
     const { open, total, count } = this.state
-    console.log(`${count} / ${total}`)
     return (
       <Modal
         isVisible={open}
@@ -457,5 +447,3 @@ class SaveScore extends Component {
     )
   }
 }
-
-export default SaveScore

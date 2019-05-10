@@ -21,7 +21,7 @@ const options = {
   chooseFromLibraryButtonTitle: 'เลือกจากคลัง...'
 }
 
-class Setup extends Component {
+export default class Setup extends Component {
   static navigationOptions = ({ navigation }) => {
     const { params } = navigation.state
     return {
@@ -70,11 +70,11 @@ class Setup extends Component {
     if (fname && lname) {
       if (type == 'Student') {
         firebase.database().ref(`users/${uid}`).update({
-          sid: sid,
-          fname: fname,
-          lname: lname,
-          group: group,
-          telNum: telNum,
+          sid,
+          fname,
+          lname,
+          group,
+          telNum,
           setup: false
         }).then(() => {
           const resetAction = StackActions.reset({
@@ -87,9 +87,9 @@ class Setup extends Component {
         })
       } else if (type == 'Teacher' || type == 'Staff') {
         firebase.database().ref(`users/${uid}`).update({
-          fname: fname,
-          lname: lname,
-          telNum: telNum,
+          fname,
+          lname,
+          telNum,
           setup: false,
         }).then(() => {
           const resetAction = StackActions.reset({
@@ -105,10 +105,8 @@ class Setup extends Component {
       Alert.alert(
         'แจ้งเตือน',
         'กรุณาใส่ชื่อจริงและนามสกุล',
-        [
-          { text: 'ตกลง' },
-        ],
-        { cancelable: false },
+        [{ text: 'ตกลง' }],
+        { cancelable: false }
       )
     }
   }
@@ -245,5 +243,3 @@ class Setup extends Component {
     )
   }
 }
-
-export default Setup

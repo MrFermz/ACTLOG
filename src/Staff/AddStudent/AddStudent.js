@@ -9,10 +9,9 @@ import {
 } from 'react-native'
 import styles from '../../styles'
 import { Card, Input } from 'react-native-elements'
-import { NavigationEvents } from 'react-navigation'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 
-class AddStudent extends Component {
+export default class AddStudent extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -29,26 +28,22 @@ class AddStudent extends Component {
   getList() {
     var vsuid = [], suid = []
     var uid = firebase.auth().currentUser.uid
-
     firebase.database().ref('comment')
       .orderByChild('cuid')
       .equalTo(uid)
       .once('value').then((snapshot) => {
         snapshot.forEach((child) => {
           var val = child.val()
-          // console.log(val.suid)
           vsuid.push(val.suid)
         })
         this.setState({ Csuid: vsuid })
       })
-
     firebase.database().ref('users')
       .orderByChild('type')
       .equalTo('Student')
       .once('value').then((snapshot) => {
         snapshot.forEach((child) => {
           var val = child.val()
-          // console.log(val.uid)
           suid.push(val.uid)
         })
         this.setState({ suid })
@@ -107,26 +102,22 @@ class AddStudent extends Component {
   searchStudent(word) {
     var vsuid = [], suid = []
     var uid = firebase.auth().currentUser.uid
-
     firebase.database().ref('comment')
       .orderByChild('cuid')
       .equalTo(uid)
       .once('value').then((snapshot) => {
         snapshot.forEach((child) => {
           var val = child.val()
-          // console.log(val.suid)
           vsuid.push(val.suid)
         })
         this.setState({ Csuid: vsuid })
       })
-
     firebase.database().ref('users')
       .orderByChild('sid')
       .equalTo(word)
       .once('value').then((snapshot) => {
         snapshot.forEach((child) => {
           var val = child.val()
-          // console.log(val.uid)
           suid.push(val.uid)
         })
         this.setState({ suid })
@@ -183,5 +174,3 @@ class AddStudent extends Component {
     )
   }
 }
-
-export default AddStudent

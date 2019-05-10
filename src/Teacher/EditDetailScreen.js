@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import firebase from 'react-native-firebase'
 import {
   View,
-  Text,
   ScrollView,
   TextInput,
   TouchableOpacity,
@@ -21,7 +20,7 @@ const options = {
   chooseFromLibraryButtonTitle: 'เลือกจากคลัง...'
 }
 
-class EditDetailScreen extends Component {
+export default class EditDetailScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     const { params } = navigation.state
     return {
@@ -72,30 +71,27 @@ class EditDetailScreen extends Component {
     var telNum = this.props.navigation.getParam('telNum')
     var avatar = this.props.navigation.getParam('avatar')
     this.setState({
-      fname: fname,
-      lname: lname,
-      email: email,
-      telNum: telNum,
-      avatar: avatar
+      fname,
+      lname,
+      email,
+      telNum,
+      avatar
     })
   }
 
   saveDetail() {
     const { fname, lname, telNum } = this.state
     var uid = firebase.auth().currentUser.uid
-
     firebase.database().ref(`users/${uid}`).update({
-      fname: fname,
-      lname: lname,
-      telNum: telNum,
+      fname,
+      lname,
+      telNum,
       setup: false
     }).then(() => {
       Alert.alert(
         'แจ้งเตือน',
         'บันทึกข้อมูลแล้ว.',
-        [
-          { text: 'ตกลง' },
-        ],
+        [{ text: 'ตกลง' }],
         { cancelable: false },
       )
       this.props.navigation.goBack()
@@ -117,16 +113,13 @@ class EditDetailScreen extends Component {
         .ref(`avatar/${uid}`)
         .child('avatar.jpg')
       let mime = 'image/jpg'
-
       imageRef.putFile(imagePath, { contentType: mime })
         .on('state_changed', (snapshot) => {
           this.setState({ open: true })
           var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
           this.setState({ progress })
-          console.log(progress)
           imageRef.getDownloadURL()
             .then((url) => {
-              console.log(url)
               this.saveUrl(url)
             })
             .then(resolve)
@@ -202,9 +195,9 @@ class EditDetailScreen extends Component {
           showEditButton
           rounded
           containerStyle={{ alignSelf: 'center', margin: 20 }} />
-        <TouchableOpacity onPress={() => this.handleModal()}>
+        {/* <TouchableOpacity onPress={() => this.handleModal()}>
           <Text>Open Modal</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TextInput
           style={styles.input.borderWithFont}
           placeholderTextColor='gray'
@@ -237,5 +230,3 @@ class EditDetailScreen extends Component {
     )
   }
 }
-
-export default EditDetailScreen

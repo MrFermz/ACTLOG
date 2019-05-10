@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import firebase from 'react-native-firebase'
 import {
   View,
-  Text,
   ScrollView,
   TextInput,
   TouchableOpacity,
@@ -22,7 +21,7 @@ const options = {
   chooseFromLibraryButtonTitle: 'เลือกจากคลัง...'
 }
 
-class EditDetailScreen extends Component {
+export default class EditDetailScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     const { params } = navigation.state
     return {
@@ -35,9 +34,9 @@ class EditDetailScreen extends Component {
             [
               {
                 text: 'ยกเลิก',
-                style: 'cancel',
+                style: 'cancel'
               },
-              { text: 'ตกลง', onPress: () => params.save() },
+              { text: 'ตกลง', onPress: () => params.save() }
             ],
             { cancelable: false },
           )}
@@ -84,32 +83,32 @@ class EditDetailScreen extends Component {
     var uuid = this.props.navigation.getParam('uuid')
     var avatar = this.props.navigation.getParam('avatar')
     this.setState({
-      sid: sid,
-      fname: fname,
-      lname: lname,
-      group: group,
-      subject: subject,
-      email: email,
-      telNum: telNum,
-      dateStartPicker: dateStartPicker,
-      dateEndPicker: dateEndPicker,
-      sidStat: sidStat,
+      sid,
+      fname,
+      lname,
+      group,
+      subject,
+      email,
+      telNum,
+      dateStartPicker,
+      dateEndPicker,
+      sidStat,
       uid: uuid,
-      avatar: avatar
+      avatar
     })
   }
 
   saveDetail() {
-    const { sid, fname, lname, group, subject, telNum, email, dateStartPicker, dateEndPicker, uid } = this.state
-    // console.log(`Start = ${dateStartPicker}\nEnd = ${dateEndPicker}`)
+    const { sid, fname, lname, group, subject, telNum,
+      email, dateStartPicker, dateEndPicker, uid } = this.state
     firebase.database().ref(`users/${uid}`).update({
-      sid: sid,
-      fname: fname,
-      lname: lname,
-      group: group,
-      subject: subject,
-      email: email,
-      telNum: telNum,
+      sid,
+      fname,
+      lname,
+      group,
+      subject,
+      email,
+      telNum,
       dateStart: dateStartPicker,
       dateEnd: dateEndPicker,
       sidStat: false,
@@ -118,9 +117,7 @@ class EditDetailScreen extends Component {
       Alert.alert(
         'แจ้งเตือน',
         'แก้ไขข้อมูลแล้ว.',
-        [
-          { text: 'ตกลง' },
-        ],
+        [{ text: 'ตกลง' }],
         { cancelable: false },
       )
       this.props.navigation.goBack()
@@ -155,7 +152,6 @@ class EditDetailScreen extends Component {
 
   _pickImage() {
     ImagePicker.showImagePicker(options, (res) => {
-      console.log(res.uri)
       this.uploadImage(res.uri)
     })
   }
@@ -170,15 +166,12 @@ class EditDetailScreen extends Component {
         .ref(`avatar/${uid}`)
         .child('avatar.jpg')
       let mime = 'image/jpg'
-
       imageRef.putFile(imagePath, { contentType: mime })
         .on('state_changed', (snapshot) => {
           var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
           this.setState({ progress })
-          console.log(progress)
           imageRef.getDownloadURL()
             .then((url) => {
-              console.log(url)
               this.saveUrl(url)
             })
             .then(resolve)
@@ -254,9 +247,9 @@ class EditDetailScreen extends Component {
           showEditButton
           rounded
           containerStyle={{ alignSelf: 'center', margin: 20 }} />
-        <TouchableOpacity onPress={() => this.handleModal()}>
+        {/* <TouchableOpacity onPress={() => this.handleModal()}>
           <Text>Open Modal</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         {this.sidLoader(sidStat, sid)}
         <TextInput
           style={styles.input.borderWithFont}
@@ -297,14 +290,14 @@ class EditDetailScreen extends Component {
           style={{ width: 350 }}
           // locale={TH}
           date={new Date(dateStartPicker)}
-          onDateChange={(date) => this.setState({ dateStartPicker: new Date(date) }, console.log(new Date(date)))}
+          onDateChange={(date) => this.setState({ dateStartPicker: new Date(date) })}
           // format='DD MMMM YYYY'
           placeholder='วันที่เริ่มฝึกงาน' />
         <DatePicker
           style={{ width: 350 }}
           // locale={TH}
           date={new Date(dateEndPicker)}
-          onDateChange={(date) => this.setState({ dateEndPicker: new Date(date) }, console.log(new Date(date)))}
+          onDateChange={(date) => this.setState({ dateEndPicker: new Date(date) })}
           // format='LL'
           placeholder='วันที่จบฝึกงาน' />
         <TextInput
@@ -315,5 +308,3 @@ class EditDetailScreen extends Component {
     )
   }
 }
-
-export default EditDetailScreen

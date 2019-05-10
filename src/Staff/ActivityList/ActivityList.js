@@ -14,7 +14,7 @@ import {
 import { NavigationEvents } from 'react-navigation'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 
-class ActivityList extends Component {
+export default class ActivityList extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -44,9 +44,9 @@ class ActivityList extends Component {
                 fname: val1.fname,
                 lname: val1.lname,
                 sid: val1.sid,
-                key: key,
-                suid: suid,
-                cuid: uid
+                key,
+                suid,
+                cuid
               })
               this.setState({ list: items })
             })
@@ -62,7 +62,7 @@ class ActivityList extends Component {
       [
         {
           text: 'ยกเลิก',
-          style: 'cancel',
+          style: 'cancel'
         },
         {
           text: 'ลบ', onPress: () => {
@@ -131,5 +131,3 @@ class ActivityList extends Component {
     )
   }
 }
-
-export default ActivityList

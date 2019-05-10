@@ -16,7 +16,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { Input } from 'react-native-elements'
 
-class LoginScreen extends Component {
+export default class LoginScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -41,10 +41,10 @@ class LoginScreen extends Component {
     if (email && password && (email != '' || password != '')) {
       firebase.auth().signInWithEmailAndPassword(email, password)
         .then((user) => {
-          // if (user.user.emailVerified) {
-          this.getUserType()
-          // }
-          // this.setState({ loading: false })
+          if (user.user.emailVerified) {
+            this.getUserType()
+          }
+          this.setState({ loading: false })
         })
         .catch((msgError) => {
           this.setState({ loading: false })
@@ -55,9 +55,7 @@ class LoginScreen extends Component {
       Alert.alert(
         'แจ้งเตือน',
         'กรุณาป้อนข้อมูล!',
-        [
-          { text: 'ตกลง' },
-        ],
+        [{ text: 'ตกลง' }],
         { cancelable: false },
       )
     }
@@ -65,7 +63,6 @@ class LoginScreen extends Component {
 
   getUserType() {
     var uid = firebase.auth().currentUser.uid
-
     this.setState({ type: '' })
     firebase.database().ref(`users/${uid}/typeStat`)
       .once('value').then((snapshot) => {
@@ -78,7 +75,6 @@ class LoginScreen extends Component {
               var val = snapshot.val().type
               var setup = snapshot.val().setup
               var year = snapshot.val().year
-              console.log(currYear, year)
               this.setState({ type: val })
               if (this.state.type == val && this.state.type != 'none') {
                 if ((val == 'Student') || val == 'Teacher' || val == 'Admin' || val == 'Staff') {
@@ -158,8 +154,7 @@ class LoginScreen extends Component {
             <Icon
               name='user-alt'
               size={icoSize}
-              style={styles.icon.color}
-            />
+              style={styles.icon.color} />
           }
           placeholder='อีเมลล์'
           autoCapitalize='none'
@@ -175,8 +170,7 @@ class LoginScreen extends Component {
             <Icon
               name='key'
               size={icoSize}
-              style={styles.icon.color}
-            />
+              style={styles.icon.color} />
           }
           placeholder='รหัสผ่าน'
           autoCapitalize='none'
@@ -196,5 +190,3 @@ class LoginScreen extends Component {
     )
   }
 }
-
-export default LoginScreen

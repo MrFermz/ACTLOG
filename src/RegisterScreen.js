@@ -6,14 +6,13 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
-  Button,
   Picker
 } from 'react-native'
 import styles from './styles'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { Input } from 'react-native-elements'
 
-class RegisterScreen extends Component {
+export default class RegisterScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -37,12 +36,12 @@ class RegisterScreen extends Component {
             var year = new Date().getFullYear()
             var uid = firebaseAuth.currentUser.uid
             firebase.database().ref(`users/${uid}`).set({
-              uid: uid,
-              email: email,
+              uid,
+              email,
               fname: 'ชื่อจริง',
               lname: 'นามสกุล',
               telNum: 'เบอร์โทร',
-              type: type,
+              type,
               avatar: '',
               setup: false,
               typeStat: false,
@@ -56,9 +55,7 @@ class RegisterScreen extends Component {
                 Alert.alert(
                   'แจ้งเตือน',
                   'สมัครสมาชิกสำเร็จ.\nติดต่อแอดมินเพื่อยืนยันการเข้าใช้งาน',
-                  [
-                    { text: 'ตกลง', onPress: () => this.props.navigation.goBack() },
-                  ],
+                  [{ text: 'ตกลง', onPress: () => this.props.navigation.goBack() }],
                   { cancelable: false },
                 )
               }
@@ -74,9 +71,7 @@ class RegisterScreen extends Component {
       Alert.alert(
         'แจ้งเตือน',
         'กรุณากรอกข้อมูลให้ครบ!',
-        [
-          { text: 'ตกลง' },
-        ],
+        [{ text: 'ตกลง' }],
         { cancelable: false },
       )
     }
@@ -172,5 +167,3 @@ class RegisterScreen extends Component {
     )
   }
 }
-
-export default RegisterScreen

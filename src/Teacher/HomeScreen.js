@@ -1,19 +1,13 @@
 import React, { Component } from 'react'
-import firebase from 'react-native-firebase'
 import {
   View,
   Text,
-  TouchableOpacity,
+  TouchableOpacity
 } from 'react-native'
 import styles from '../styles'
-import {
-  StackActions,
-  NavigationActions
-} from 'react-navigation'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 
-class HomeScreen extends Component {
-
+export default class HomeScreen extends Component {
   Visit() {
     this.props.navigation.navigate('TeachVisit')
   }
@@ -24,17 +18,6 @@ class HomeScreen extends Component {
 
   AddStudent() {
     this.props.navigation.navigate('TeachAddStudent')
-  }
-
-  Logout() {
-    firebase.auth().signOut().then(() => {
-      console.log('Logout...')
-      const resetAction = StackActions.reset({
-        index: 0,
-        actions: [NavigationActions.navigate({ routeName: 'Login' })],
-      })
-      this.props.navigation.dispatch(resetAction)
-    })
   }
 
   render() {
@@ -63,5 +46,3 @@ class HomeScreen extends Component {
     )
   }
 }
-
-export default HomeScreen

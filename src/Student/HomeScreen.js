@@ -2,14 +2,12 @@ import React, { Component } from 'react'
 import {
   View,
   Text,
-  TouchableOpacity,
-  Alert,
-  Image
+  TouchableOpacity
 } from 'react-native'
 import styles from '../styles'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 
-class HomeScreen extends Component {
+export default class HomeScreen extends Component {
   TimeTable() {
     this.props.navigation.navigate('StudentTimeTable')
   }
@@ -44,5 +42,3 @@ class HomeScreen extends Component {
     )
   }
 }
-
-export default HomeScreen

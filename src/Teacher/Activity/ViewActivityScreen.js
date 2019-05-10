@@ -11,7 +11,7 @@ import {
   Card,
 } from 'react-native-elements'
 
-class CheckActivityScreen extends Component {
+export default class CheckActivityScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: navigation.getParam('date')
@@ -36,10 +36,7 @@ class CheckActivityScreen extends Component {
     firebase.database().ref(`timeTable/${suid}/${key}/photos`)
       .once('value').then((snapshot) => {
         snapshot.forEach((child) => {
-          console.log(child.val().photo)
-          items.push({
-            photo: child.val().photo
-          })
+          items.push({ photo: child.val().photo })
         })
         this.setState({ list: items })
       })
@@ -47,7 +44,6 @@ class CheckActivityScreen extends Component {
 
   render() {
     const { list } = this.state
-    // console.log(list)
     var ACT = this.props.navigation.getParam('ACT')
     return (
       <ScrollView style={styles.view.scrollView}>
@@ -71,5 +67,3 @@ class CheckActivityScreen extends Component {
     )
   }
 }
-
-export default CheckActivityScreen

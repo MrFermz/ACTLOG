@@ -1,12 +1,11 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import firebase from 'react-native-firebase'
 import {
   View,
   Text,
   ScrollView,
   TouchableOpacity,
-  Alert,
-  ActivityIndicator,
+  Alert
 } from 'react-native'
 import styles from '../../styles'
 import {
@@ -15,7 +14,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import Icon2 from 'react-native-vector-icons/FontAwesome'
 
-class TimeTableScreen extends Component {
+export default class TimeTableScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state
     return {
@@ -28,11 +27,11 @@ class TimeTableScreen extends Component {
             [
               {
                 text: 'ยกเลิก',
-                style: 'cancel',
+                style: 'cancel'
               },
-              { text: 'เพิ่ม', onPress: () => params.add() },
+              { text: 'เพิ่ม', onPress: () => params.add() }
             ],
-            { cancelable: false },
+            { cancelable: false }
           )}
           style={styles.button.headerRight}>
           {<Icon name='plus' size={30} color='white' />}
@@ -68,7 +67,7 @@ class TimeTableScreen extends Component {
           currentDate = child.date
           items.push({
             uid,
-            key: key,
+            key,
             date: child.date,
             timeCome: child.timeCome,
             timeBack: child.timeBack,
@@ -81,9 +80,7 @@ class TimeTableScreen extends Component {
             timeBack: child.timeBack
           })
         })
-        this.setState({
-          list: items,
-        })
+        this.setState({ list: items })
       })
   }
 
@@ -94,7 +91,6 @@ class TimeTableScreen extends Component {
     var month = date.getMonth() + 1
     var day = date.getDate()
     date = year + '-' + month + '-' + day
-
     if (this.state.currentDate != date) {
       this.setState({ loading: true })
       firebase.database().ref(`timeTable/${uid}`).push({
@@ -102,7 +98,7 @@ class TimeTableScreen extends Component {
         timeCome: 'ลงเวลามา',
         timeBack: 'ลงเวลากลับ',
         morning: 'ช่วงเช้า',
-        afternoon: 'ช่วงบ่าย',
+        afternoon: 'ช่วงบ่าย'
       }).then(() => {
         this.setState({ loading: false })
         this.componentDidMount()
@@ -111,10 +107,8 @@ class TimeTableScreen extends Component {
       Alert.alert(
         'แจ้งเตือน',
         'วันนี้ลงตารางเวลาแล้ว !',
-        [
-          { text: 'ปิด' },
-        ],
-        { cancelable: false },
+        [{ text: 'ปิด' }],
+        { cancelable: false }
       )
     }
   }
@@ -122,17 +116,14 @@ class TimeTableScreen extends Component {
   timeStampCome = (timeCome, key, date) => {
     var uid, hour, minute, timeStamp
     uid = firebase.auth().currentUser.uid
-
     hour = new Date().getHours()
     minute = new Date().getMinutes()
     timeStamp = hour + ':' + minute
-
     var now = new Date()
     var year = now.getFullYear()
     var month = now.getMonth() + 1
     var day = now.getDate()
     now = year + '-' + month + '-' + day
-
     if ((timeCome == 'ลงเวลามา') && (date == now)) {
       firebase.database().ref(`timeTable/${uid}/${key}`).update({
         timeCome: timeStamp
@@ -143,10 +134,8 @@ class TimeTableScreen extends Component {
       Alert.alert(
         'แจ้งเตือน',
         'ลงเวลามาแล้ว !',
-        [
-          { text: 'ปิด' },
-        ],
-        { cancelable: false },
+        [{ text: 'ปิด' }],
+        { cancelable: false }
       )
     }
   }
@@ -154,18 +143,14 @@ class TimeTableScreen extends Component {
   timeStampBack = (timeBack, key, date) => {
     var uid, hour, minute, timeStamp
     uid = firebase.auth().currentUser.uid
-
     hour = new Date().getHours()
     minute = new Date().getMinutes()
     timeStamp = hour + ':' + minute
-
     var now = new Date()
     var year = now.getFullYear()
     var month = now.getMonth() + 1
     var day = now.getDate()
     now = year + '-' + month + '-' + day
-    console.log(date, now)
-
     if ((timeBack == 'ลงเวลากลับ') && (date == now)) {
       firebase.database().ref(`timeTable/${uid}/${key}`).update({
         timeBack: timeStamp
@@ -176,10 +161,8 @@ class TimeTableScreen extends Component {
       Alert.alert(
         'แจ้งเตือน',
         'ลงเวลากลับแล้ว !',
-        [
-          { text: 'ปิด' },
-        ],
-        { cancelable: false },
+        [{ text: 'ปิด' }],
+        { cancelable: false }
       )
     }
   }
@@ -187,63 +170,63 @@ class TimeTableScreen extends Component {
   renderCheck(stat) {
     if (stat == 0) {
       return (
-        <React.Fragment>
+        <Fragment>
           <TouchableOpacity
             disabled
             style={styles.button.subStat}>
             <Text style={styles.button.subLabel}>ปกติ</Text>
           </TouchableOpacity>
-        </React.Fragment>
+        </Fragment>
       )
     } else if (stat == 1) {
       return (
-        <React.Fragment>
+        <Fragment>
           <TouchableOpacity
             disabled
             style={styles.button.subStat1}>
             <Text style={styles.button.subLabel}>ขาด</Text>
           </TouchableOpacity>
-        </React.Fragment>
+        </Fragment>
       )
     } else if (stat == 2) {
       return (
-        <React.Fragment>
+        <Fragment>
           <TouchableOpacity
             disabled
             style={styles.button.subStat2}>
             <Text style={styles.button.subLabel}>สาย</Text>
           </TouchableOpacity>
-        </React.Fragment>
+        </Fragment>
       )
     } else if (stat == 3) {
       return (
-        <React.Fragment>
+        <Fragment>
           <TouchableOpacity
             disabled
             style={styles.button.subStat3}>
             <Text style={styles.button.subLabel}>ป่วย</Text>
           </TouchableOpacity>
-        </React.Fragment>
+        </Fragment>
       )
     } else if (stat == 4) {
       return (
-        <React.Fragment>
+        <Fragment>
           <TouchableOpacity
             disabled
             style={styles.button.subStat4}>
             <Text style={styles.button.subLabel}>ลา</Text>
           </TouchableOpacity>
-        </React.Fragment>
+        </Fragment>
       )
     } else {
       return (
-        <React.Fragment>
+        <Fragment>
           <TouchableOpacity
             disabled
             style={styles.button.subStatWait}>
             <Text style={styles.button.subLabel}>รอตรวจ</Text>
           </TouchableOpacity>
-        </React.Fragment>
+        </Fragment>
       )
     }
   }
@@ -256,7 +239,7 @@ class TimeTableScreen extends Component {
       [
         {
           text: 'ยกเลิก',
-          style: 'cancel',
+          style: 'cancel'
         },
         {
           text: 'ลบ', onPress: () => {
@@ -271,7 +254,7 @@ class TimeTableScreen extends Component {
           }
         },
       ],
-      { cancelable: false },
+      { cancelable: false }
     )
   }
 
@@ -287,19 +270,16 @@ class TimeTableScreen extends Component {
                 <View style={styles.view.timeTableContainer}>
                   <Text style={styles.label.headerTimeTable}>{user.date}</Text>
                   <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
-
                     <TouchableOpacity
                       style={styles.button.timeButtonLeft}
                       onPress={() => this.timeStampCome(user.timeCome, user.key, user.date)}>
                       <Text style={styles.label._sub}>{user.timeCome}</Text>
                     </TouchableOpacity>
-
                     <TouchableOpacity
                       style={styles.button.timeButtonRight}
                       onPress={() => this.timeStampBack(user.timeBack, user.key, user.date)}>
                       <Text style={styles.label._sub}>{user.timeBack}</Text>
                     </TouchableOpacity>
-
                   </View>
                   <TouchableOpacity
                     onPress={() =>
@@ -352,5 +332,3 @@ class TimeTableScreen extends Component {
     )
   }
 }
-
-export default TimeTableScreen
