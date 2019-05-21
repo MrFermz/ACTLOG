@@ -116,7 +116,7 @@ export default class RegisterScreen extends Component {
               size={icoSize}
               style={styles.icon.color} />
           }
-          placeholder='อีเมลล์' />
+          placeholder='อีเมล' />
         <Input
           containerStyle={styles.input.container}
           inputContainerStyle={styles.input.inputContainer}

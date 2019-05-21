@@ -156,7 +156,7 @@ export default class LoginScreen extends Component {
               size={icoSize}
               style={styles.icon.color} />
           }
-          placeholder='อีเมลล์'
+          placeholder='อีเมล'
           autoCapitalize='none'
           autoCorrect={false}
           keyboardType='email-address'
