@@ -224,7 +224,7 @@ export default class AddActivity extends Component {
         <TouchableOpacity
           onPress={() => this._pickImage()}
           style={styles.button.main}>
-          <Text style={styles.button.mainLabel}>อัพโหลดรูป</Text>
+          <Text style={styles.button.mainLabel}>อัปโหลดรูป</Text>
         </TouchableOpacity>
       </ScrollView>
     )

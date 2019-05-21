@@ -337,7 +337,7 @@ export default class SaveVisitScreen extends Component {
         <TouchableOpacity
           onPress={() => this._pickImage()}
           style={styles.button.sub}>
-          <Text style={styles.button.subLabel}>อัพโหลดรูป</Text>
+          <Text style={styles.button.subLabel}>อัปโหลดรูป</Text>
         </TouchableOpacity>
         {list.map((user, i) => {
           return (
