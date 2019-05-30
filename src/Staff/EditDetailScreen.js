@@ -6,7 +6,8 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
-  ActivityIndicator
+  ActivityIndicator,
+  Text
 } from 'react-native'
 import styles from '../styles'
 import ImagePicker from 'react-native-image-picker'
@@ -181,10 +182,15 @@ export default class EditDetailScreen extends Component {
           {progress == 100
             ? <TouchableOpacity
               onPress={() => this.handleModal()}
-              style={styles.button.subAdd}>
-              <Icon
+              style={styles.button.loadingButton}>
+              <Icon color='white'
                 size={30}
-                name='check' />
+                name='check'
+                style={styles.button.loadingIcon} />
+              <Text style={{
+                fontSize: 20, color: '#2ECC71',
+                alignSelf: 'center'
+              }}>อัปโหลดสำเร็จ</Text>
             </TouchableOpacity>
             : <ActivityIndicator
               size='large' />}

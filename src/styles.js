@@ -223,6 +223,22 @@ const button = StyleSheet.create({
     // backgroundColor: 'red',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  loadingButton: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+    height: 54, width: 200,
+    borderRadius: 27,
+    borderWidth: 3,
+    borderColor: '#2ECC71'
+  },
+  loadingIcon: {
+    alignSelf: 'center',
+    borderRadius: 25,
+    padding: 5,
+    marginLeft: 4,
+    marginRight: 7,
+    backgroundColor: '#2ECC71'
   }
 })
 

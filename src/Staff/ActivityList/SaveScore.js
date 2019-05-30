@@ -221,9 +221,9 @@ export default class SaveScore extends Component {
           }
         }}
         onBackdropPress={() => {
-          if (count == total) {
-            this.handleModal()
-          }
+          // if (count == total) {
+          this.handleModal()
+          // }
         }}>
         <View
           style={{
@@ -238,10 +238,15 @@ export default class SaveScore extends Component {
           {count == total
             ? <TouchableOpacity
               onPress={() => this.handleModal()}
-              style={styles.button.subAdd}>
-              <Icon
+              style={styles.button.loadingButton}>
+              <Icon color='white'
                 size={30}
-                name='check' />
+                name='check'
+                style={styles.button.loadingIcon} />
+              <Text style={{
+                fontSize: 20, color: '#2ECC71',
+                alignSelf: 'center'
+              }}>อัปโหลดสำเร็จ</Text>
             </TouchableOpacity>
             : <ActivityIndicator
               size='large' />}
