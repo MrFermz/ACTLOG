@@ -40,13 +40,14 @@ export default class ActivityList extends Component {
           firebase.database().ref(`users/${suid}`)
             .once('value').then((snapshot) => {
               var val1 = snapshot.val()
+              console.log(val1)
               items.push({
                 fname: val1.fname,
                 lname: val1.lname,
                 sid: val1.sid,
                 key,
                 suid,
-                cuid
+                cuid: uid
               })
               this.setState({ list: items })
             })
