@@ -40,7 +40,7 @@ export default class DetailScreen extends Component {
           fname: data.fname,
           lname: data.lname,
           email: data.email,
-          telNum: data.telNum,
+          telNum: data.tel_number,
           uuid: uid,
           avatar: data.avatar
         })

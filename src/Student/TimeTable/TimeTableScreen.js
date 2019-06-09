@@ -69,15 +69,15 @@ export default class TimeTableScreen extends Component {
             uid,
             key,
             date: child.date,
-            timeCome: child.timeCome,
-            timeBack: child.timeBack,
+            timeCome: child.work_come,
+            timeBack: child.work_back,
             stat: child.stat,
             comment: child.comment
           })
           this.setState({
             currentDate: currentDate,
-            timeCome: child.timeCome,
-            timeBack: child.timeBack
+            timeCome: child.work_come,
+            timeBack: child.work_back
           })
         })
         this.setState({ list: items })
@@ -94,9 +94,9 @@ export default class TimeTableScreen extends Component {
     if (this.state.currentDate != date) {
       this.setState({ loading: true })
       firebase.database().ref(`timeTable/${uid}`).push({
-        date: date,
-        timeCome: 'ลงเวลามา',
-        timeBack: 'ลงเวลากลับ',
+        date,
+        work_come: 'ลงเวลามา',
+        work_back: 'ลงเวลากลับ',
         morning: 'ช่วงเช้า',
         afternoon: 'ช่วงบ่าย'
       }).then(() => {
@@ -126,7 +126,7 @@ export default class TimeTableScreen extends Component {
     now = year + '-' + month + '-' + day
     if ((timeCome == 'ลงเวลามา') && (date == now)) {
       firebase.database().ref(`timeTable/${uid}/${key}`).update({
-        timeCome: timeStamp
+        work_come: timeStamp
       }).then(() => {
         this.componentDidMount()
       })
@@ -153,7 +153,7 @@ export default class TimeTableScreen extends Component {
     now = year + '-' + month + '-' + day
     if ((timeBack == 'ลงเวลากลับ') && (date == now)) {
       firebase.database().ref(`timeTable/${uid}/${key}`).update({
-        timeBack: timeStamp
+        work_back: timeStamp
       }).then(() => {
         this.componentDidMount()
       })

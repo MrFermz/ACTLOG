@@ -59,11 +59,9 @@ export default class AddActivity extends Component {
   saveActivity() {
     const { morning, afternoon } = this.state
     var { navigation } = this.props
-    var uid, timeTable
+    var uid = firebase.auth().currentUser.uid
     var key = navigation.getParam('key')
-    uid = firebase.auth().currentUser.uid
-    timeTable = firebase.database().ref(`timeTable/${uid}/${key}`)
-    timeTable.update({
+    firebase.database().ref(`timeTable/${uid}/${key}`).update({
       morning,
       afternoon
     }).then(() => {

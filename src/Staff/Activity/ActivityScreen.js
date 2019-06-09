@@ -34,13 +34,13 @@ export default class Activity extends Component {
           key = child.key
           items.push({
             date: val.date,
-            timeCome: val.timeCome,
-            timeBack: val.timeBack,
+            timeCome: val.work_come,
+            timeBack: val.work_back,
             morning: val.morning,
             afternoon: val.afternoon,
             key,
             suid,
-            stat: val.stat
+            stat: val.stat_approve
           })
           this.setState({ list: items })
         })
@@ -49,7 +49,7 @@ export default class Activity extends Component {
 
   onCheck(stat, uid, key) {
     firebase.database().ref(`timeTable/${uid}/${key}`).update({
-      stat: stat
+      stat_approve: stat
     }).then(() => {
       this.componentDidMount()
     })

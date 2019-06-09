@@ -221,9 +221,9 @@ export default class SaveScore extends Component {
           }
         }}
         onBackdropPress={() => {
-          // if (count == total) {
-          this.handleModal()
-          // }
+          if (count == total) {
+            this.handleModal()
+          }
         }}>
         <View
           style={{

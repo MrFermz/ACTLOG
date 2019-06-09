@@ -34,8 +34,8 @@ export default class CommentScreen extends Component {
         var val = snapshot.val()
         this.setState({
           date: val.date,
-          timeCome: val.timeCome,
-          timeBack: val.timeBack,
+          timeCome: val.work_come,
+          timeBack: val.work_back,
           comment: val.comment
         })
       })

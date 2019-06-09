@@ -103,17 +103,16 @@ export default class EditDetailScreen extends Component {
     const { sid, fname, lname, group, subject, telNum,
       email, dateStartPicker, dateEndPicker, uid } = this.state
     firebase.database().ref(`users/${uid}`).update({
-      sid,
+      suid: sid,
       fname,
       lname,
       group,
-      subject,
+      major: subject,
       email,
-      telNum,
-      dateStart: dateStartPicker,
-      dateEnd: dateEndPicker,
-      sidStat: false,
-      setup: false
+      tel_number: telNum,
+      date_start: dateStartPicker,
+      date_end: dateEndPicker,
+      stat_suid: false
     }).then(() => {
       Alert.alert(
         'แจ้งเตือน',

@@ -70,11 +70,11 @@ export default class Setup extends Component {
     if (fname && lname) {
       if (type == 'Student') {
         firebase.database().ref(`users/${uid}`).update({
-          sid,
+          suid: sid,
           fname,
           lname,
           group,
-          telNum,
+          tel_number: telNum,
           setup: false
         }).then(() => {
           const resetAction = StackActions.reset({
@@ -89,8 +89,8 @@ export default class Setup extends Component {
         firebase.database().ref(`users/${uid}`).update({
           fname,
           lname,
-          telNum,
-          setup: false,
+          tel_number: telNum,
+          stat_setup: false,
         }).then(() => {
           const resetAction = StackActions.reset({
             index: 0,

@@ -39,7 +39,7 @@ export default class AddStudent extends Component {
         this.setState({ Csuid: vsuid })
       })
     firebase.database().ref('users')
-      .orderByChild('type')
+      .orderByChild('type_user')
       .equalTo('Student')
       .once('value').then((snapshot) => {
         snapshot.forEach((child) => {

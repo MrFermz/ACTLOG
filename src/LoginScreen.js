@@ -41,9 +41,9 @@ export default class LoginScreen extends Component {
     if (email && password && (email != '' || password != '')) {
       firebase.auth().signInWithEmailAndPassword(email, password)
         .then((user) => {
-          if (user.user.emailVerified) {
-            this.getUserType()
-          }
+          // if (user.user.emailVerified) {
+          this.getUserType()
+          // }
           this.setState({ loading: false })
         })
         .catch((msgError) => {
@@ -72,11 +72,13 @@ export default class LoginScreen extends Component {
           firebase.database().ref(`users/${uid}`)
             .once('value').then((snapshot) => {
               var currYear = new Date().getFullYear()
-              var val = snapshot.val().type
-              var setup = snapshot.val().setup
+              var val = snapshot.val().type_user
+              var setup = snapshot.val().stat_setup
               var year = snapshot.val().year
+              var stat = snapshot.val().stat_type_user
+              console.log(stat)
               this.setState({ type: val })
-              if (this.state.type == val && this.state.type != 'none') {
+              if (this.state.type == val && this.state.type != 'none' && stat) {
                 if ((val == 'Student') || val == 'Teacher' || val == 'Admin' || val == 'Staff') {
                   this.goHomeScreen(val, setup)
                 } else {
@@ -96,7 +98,7 @@ export default class LoginScreen extends Component {
         index: 0,
         actions: [NavigationActions.navigate({
           routeName: 'Setup',
-          params: { type: type }
+          params: { type }
         })]
       })
       this.props.navigation.dispatch(resetAction)

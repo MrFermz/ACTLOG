@@ -44,7 +44,7 @@ export default class ActivityList extends Component {
               items.push({
                 fname: val1.fname,
                 lname: val1.lname,
-                sid: val1.sid,
+                sid: val1.suid,
                 key,
                 suid,
                 cuid: uid

@@ -21,12 +21,12 @@ export default class RegisterScreen extends Component {
       rePassword: '',
       loading: false,
       error: '',
-      type: ''
+      type_user: ''
     }
   }
 
   onRegisterPressed() {
-    const { email, password, rePassword, type } = this.state
+    const { email, password, rePassword, type_user } = this.state
     firebaseAuth = firebase.auth()
     if (email != '' && password != '') {
       if (password == rePassword) {
@@ -38,27 +38,23 @@ export default class RegisterScreen extends Component {
             firebase.database().ref(`users/${uid}`).set({
               uid,
               email,
-              fname: 'ชื่อจริง',
-              lname: 'นามสกุล',
-              telNum: 'เบอร์โทร',
-              type,
-              avatar: '',
-              setup: false,
-              typeStat: false,
+              type_user,
+              stat_setup: false,
+              stat_type_user: false,
               year: String(year)
             }).then((sendVerify) => {
-              if (sendVerify == false) {
-                return false
-              } else {
-                firebase.auth().currentUser.sendEmailVerification()
-                this.setState({ loading: false })
-                Alert.alert(
-                  'แจ้งเตือน',
-                  'สมัครสมาชิกสำเร็จ.\nติดต่อแอดมินเพื่อยืนยันการเข้าใช้งาน',
-                  [{ text: 'ตกลง', onPress: () => this.props.navigation.goBack() }],
-                  { cancelable: false },
-                )
-              }
+              // if (sendVerify == false) {
+              //   return false
+              // } else {
+              // firebase.auth().currentUser.sendEmailVerification()
+              this.setState({ loading: false })
+              Alert.alert(
+                'แจ้งเตือน',
+                'สมัครสมาชิกสำเร็จ.\nติดต่อแอดมินเพื่อยืนยันการเข้าใช้งาน',
+                [{ text: 'ตกลง', onPress: () => this.props.navigation.goBack() }],
+                { cancelable: false },
+              )
+              // }
             })
           }).catch((error) => {
             this.setState({ loading: false })
@@ -152,10 +148,10 @@ export default class RegisterScreen extends Component {
           }
           placeholder='รหัสผ่านอีกครั้ง' />
         <Picker
-          selectedValue={this.state.type}
+          selectedValue={this.state.type_user}
           mode='dialog'
           style={{ height: 50, width: '90%', alignSelf: 'center', marginTop: 10 }}
-          onValueChange={(value, i) => this.setState({ type: value })}>
+          onValueChange={(value, i) => this.setState({ type_user: value })}>
           <Picker.Item label='- เลือกประเภทผู้ใช้ -' value='none' />
           <Picker.Item label='นักศึกษา' value='Student' />
           <Picker.Item label='อาจารย์' value='Teacher' />

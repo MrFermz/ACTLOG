@@ -86,8 +86,7 @@ export default class EditDetailScreen extends Component {
     firebase.database().ref(`users/${uid}`).update({
       fname,
       lname,
-      telNum,
-      setup: false
+      tel_number: telNum
     }).then(() => {
       Alert.alert(
         'แจ้งเตือน',

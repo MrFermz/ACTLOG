@@ -45,16 +45,16 @@ export default class DetailScreen extends Component {
         var data = snapshot.val()
         this.setState({
           uuid: uid,
-          sid: data.sid,
+          sid: data.suid,
           fname: data.fname,
           lname: data.lname,
           group: data.group,
-          subject: data.subject,
-          telNum: data.telNum,
+          subject: data.major,
+          telNum: data.tel_number,
           email: data.email,
-          dateStartPicker: data.dateStart,
-          dateEndPicker: data.dateEnd,
-          sidStat: data.sidStat,
+          dateStartPicker: data.date_start,
+          dateEndPicker: data.date_end,
+          sidStat: data.stat_suid,
           avatar: data.avatar,
           company: '-'
         })
@@ -74,16 +74,16 @@ export default class DetailScreen extends Component {
                       var val3 = snapshot.val()
                       this.setState({
                         uuid: uid,
-                        sid: data.sid,
+                        sid: data.suid,
                         fname: data.fname,
                         lname: data.lname,
                         group: data.group,
-                        subject: data.subject,
-                        telNum: data.telNum,
+                        subject: data.major,
+                        telNum: data.tel_number,
                         email: data.email,
-                        dateStartPicker: data.dateStart,
-                        dateEndPicker: data.dateEnd,
-                        sidStat: data.sidStat,
+                        dateStartPicker: data.date_start,
+                        dateEndPicker: data.date_end,
+                        sidStat: data.stat_suid,
                         avatar: data.avatar,
                         company: val3.name,
                         companyId: data.company
@@ -99,18 +99,18 @@ export default class DetailScreen extends Component {
   editDetail() {
     const { sid, fname, lname, group, subject, telNum, email, sidStat, uuid, avatar, dateStartPicker, dateEndPicker } = this.state
     this.props.navigation.navigate('StudentEditDetail', {
-      sid: sid,
-      fname: fname,
-      lname: lname,
-      email: email,
-      group: group,
-      subject: subject,
-      telNum: telNum,
-      sidStat: sidStat,
-      uuid: uuid,
-      avatar: avatar,
-      dateStartPicker: dateStartPicker,
-      dateEndPicker: dateEndPicker
+      sid,
+      fname,
+      lname,
+      email,
+      group,
+      subject,
+      telNum,
+      sidStat,
+      uuid,
+      avatar,
+      dateStartPicker,
+      dateEndPicker
     })
   }
 
