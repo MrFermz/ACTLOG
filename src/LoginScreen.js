@@ -146,7 +146,7 @@ export default class LoginScreen extends Component {
           resizeMode='center'
           style={{ width: 220, height: 220 }}
           source={require('../assets/logo.png')} />
-        <Text>1.4.0-BETA6</Text>
+        <Text>1.5</Text>
         <Input
           containerStyle={styles.input.container}
           inputContainerStyle={styles.input.inputContainer}
